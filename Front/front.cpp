@@ -14,7 +14,7 @@ const char* databaseName = "aggregator";
 
 //prototypes
 void interface(mysqlpp::Connection&);
-int fetch_news(mysqlpp::Connection&);
+int fetch_news_msqlpp(mysqlpp::Connection&);
 mysqlpp::Connection db_connect(const char*,const char*,const char*,const char*);
 
 //default namespace
@@ -43,7 +43,7 @@ void interface(mysqlpp::Connection& conn){
     // switch on command
     switch(command){
       case 0: cout << "Hello\n"; break;
-			case 1: cout << "Fetching News\n";fetch_news(conn); break;
+			case 1: cout << "Fetching News\n";fetch_news_msqlpp(conn); break;
 			case 2: cout << "Goodbye\n"; break;
 			default: command = 2;
     }
@@ -65,7 +65,7 @@ mysqlpp::Connection db_connect(const char* user,const char* pass,const char* ser
 	}
 }
 
-int fetch_news(mysqlpp::Connection& conn){
+int fetch_news_msqlpp(mysqlpp::Connection& conn){
 		//query the database
 		mysqlpp::Query query = conn.query("SELECT * FROM Business;");
 		//store results
