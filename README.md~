@@ -16,5 +16,3 @@ sudo apt-get install libmysqlclient-dev libmysqld-dev libmysql++-dev libmysql++-
 https://code.tutsplus.com/tutorials/how-to-collaborate-on-github--net-34267
 
 always push to development, then when development works we can merge it with master.
-
-hi
