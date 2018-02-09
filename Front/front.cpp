@@ -10,15 +10,16 @@ Purpose: simple command line interface for connecting to
 //  g++ front.cpp -o test -I/usr/include/mysql++ -I/usr/include/mysql -lmysqlpp
 using namespace std;
 
-void interface();
-int fetch_news(mysqlpp::Connection,clock_t);
+void interface(char*,char*);
+int fetch_news(mysqlpp::Connection,clock_t,const char*,const char*);
 void print_news();
 
-int main(){
-  interface();
+int main(int argc, char* argv[]){
+
+  interface(argv[1],argv[2]);
 }
 
-void interface(){
+void interface(char* user, char* pass){
 
 	mysqlpp::Connection conn(false);
 	clock_t timer;
@@ -31,7 +32,7 @@ void interface(){
     // switch on command
     switch(command){
       case 0: cout << "hello\n"; break;
-			case 1: timer=clock(); fetch_news(conn,timer); break;
+			case 1: timer=clock(); fetch_news(conn,timer,user,pass); break;
 			case 2: cout << "goodbye\n"; break;
 			default: command = 1;
     }
@@ -43,12 +44,12 @@ void interface(){
   }
 }
 
-int fetch_news(mysqlpp::Connection conn, clock_t timer){
+int fetch_news(mysqlpp::Connection conn, clock_t timer,const char* user_in,const char* pass_in){
   cout << "Fetching News\n";
 
 	//database information
-	const char* user = "cs441backendAccess";
-	const char* pass = "t4back441";
+	const char* user = user_in;
+	const char* pass = pass_in;
 	const char* server = "54.241.100.64";
 	const char* database = "aggregator";
 
