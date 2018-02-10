@@ -13,7 +13,7 @@ run: make
 sudo apt-get install libmysqlclient-dev libmysqld-dev libmysql++-dev libmysql++-doc libmysql++3v5
 
 # Using QT
-make sure to put `build*` in your local .gitignore file to not push the build contents.
+make sure to put `build*` is in your local .gitignore file to not push the build contents. Plus it should already be there if you pull this repo correctly.
 
 # How to use this repo
 https://code.tutsplus.com/tutorials/how-to-collaborate-on-github--net-34267
