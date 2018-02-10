@@ -30,7 +30,7 @@
    <widget class="QTextEdit" name="textEdit">
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>120</x>
       <y>90</y>
       <width>104</width>
       <height>74</height>

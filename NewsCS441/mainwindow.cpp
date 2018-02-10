@@ -23,3 +23,4 @@ void MainWindow::on_textEdit_textChanged()
 {
     ui->label->setText(ui->textEdit->toPlainText());
 }
+
