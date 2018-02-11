@@ -14,8 +14,8 @@ int main(int argc, char *argv[])
     QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
         db.setHostName("aggregator.ddns.net");
         db.setDatabaseName("aggregator");
-        db.setUserName("cs411backendAccess");
-        db.setPassword("t4back441");
+        db.setUserName(""); //Hid name for now
+        db.setPassword(""); //Hid pass for now
         bool ok = db.open();
         qDebug() << "DB Opened: " << ok;
 
