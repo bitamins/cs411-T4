@@ -1,9 +1,22 @@
 #include "mainwindow.h"
+#include "sql_db_wrapper.h"
 #include <QApplication>
 #include <QString>
 #include <QSqlDatabase>
 #include <QDebug>
 #include <QSqlQuery>
+
+QSqlDatabase get_Database(){
+    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
+        db.setHostName("aggregator.ddns.net");
+        db.setDatabaseName("aggregator");
+        db.setUserName(""); //Hid name for now
+        db.setPassword(""); //Hid pass for now
+        bool ok = db.open();
+        qDebug() << "DB Opened: " << ok;
+        return db;
+
+}
 
 int main(int argc, char *argv[])
 {

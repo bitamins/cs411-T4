@@ -19,9 +19,10 @@ public:
     QSqlDatabase db;
 
 private slots:
-    void on_pushButton_clicked();
 
-    void on_textEdit_textChanged();
+    void on_Business_toggled(bool checked);
+
+    void on_Entertainment_toggled(bool checked);
 
 private:
     Ui::MainWindow *ui;

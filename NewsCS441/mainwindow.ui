@@ -7,48 +7,104 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>337</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="pushButton">
+  <widget class="QWidget" name="MAIN_WIDGET">
+   <widget class="QTableWidget" name="NewsTable">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>20</y>
-      <width>113</width>
-      <height>32</height>
+      <x>10</x>
+      <y>100</y>
+      <width>381</width>
+      <height>171</height>
      </rect>
     </property>
-    <property name="text">
-     <string>PushButton</string>
+    <property name="columnCount">
+     <number>5</number>
     </property>
+    <column>
+     <property name="text">
+      <string>Name</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Image</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Source</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Author</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Date</string>
+     </property>
+    </column>
    </widget>
-   <widget class="QTextEdit" name="textEdit">
+   <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>70</y>
-      <width>191</width>
-      <height>74</height>
+      <x>10</x>
+      <y>10</y>
+      <width>231</width>
+      <height>80</height>
      </rect>
     </property>
-   </widget>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>240</x>
-      <y>40</y>
-      <width>111</width>
-      <height>141</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>TextLabel</string>
-    </property>
+    <layout class="QGridLayout" name="News_Selections">
+     <item row="1" column="0">
+      <widget class="QCheckBox" name="Business">
+       <property name="text">
+        <string>Business</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QCheckBox" name="Entertainment">
+       <property name="text">
+        <string>Entertainment</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QCheckBox" name="Health">
+       <property name="text">
+        <string>Health</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QCheckBox" name="Science">
+       <property name="text">
+        <string>Science</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QCheckBox" name="Sports">
+       <property name="text">
+        <string>Sports</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QCheckBox" name="Technology">
+       <property name="text">
+        <string>Technology</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -57,7 +113,7 @@
      <x>0</x>
      <y>0</y>
      <width>400</width>
-     <height>22</height>
+     <height>19</height>
     </rect>
    </property>
   </widget>
