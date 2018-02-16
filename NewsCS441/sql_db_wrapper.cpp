@@ -1,11 +1,12 @@
 #include "sql_db_wrapper.h"
+#include <QDebug>
 
 SQL_DB_WRAPPER::SQL_DB_WRAPPER()
 {
 
 }
 
-void SQL_DB_WRAPPER::get_Database(){
+void SQL_DB_WRAPPER::get_Database(){ //Opens database
     db = QSqlDatabase::addDatabase("QMYSQL");
     db.setHostName("aggregator.ddns.net");
     db.setDatabaseName("aggregator");
@@ -14,30 +15,14 @@ void SQL_DB_WRAPPER::get_Database(){
     qDebug() << "DB Opened: " << db.open();
 }
 
-string SQL_DB_WRAPPER::get_Query(string category){
+QString SQL_DB_WRAPPER::get_Query(QString category){
     QSqlQuery query(db);
     QString command = "SELECT * FROM ";
-           command = command.append(category);
+           command = command + category;
     qDebug() << "Data Retrieved: " << query.exec(command);
     qDebug() << query.size();
 
 
-    return query.value(0).toString();
-//    vector<string> tempVec;
-//    while(query.next()){
-//        tempVec.append(query.value(0).toString())
-//    }
+    return query.value(1).toString();
 }
 
-/*
-
-QSqlQuery query(db);
-bool ret = query.exec("SELECT * FROM Business");
-qDebug() << "Data Retrieved: " << ret;
-
-qDebug() << query.size();
-while (query.next()) {
-        QString something = query.value(0).toString();
-        qDebug() << something;
-    }
- */

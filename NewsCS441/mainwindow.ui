@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>337</height>
+    <width>640</width>
+    <height>453</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,10 +17,10 @@
    <widget class="QTableWidget" name="NewsTable">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>100</y>
-      <width>381</width>
-      <height>171</height>
+      <x>11</x>
+      <y>83</y>
+      <width>501</width>
+      <height>192</height>
      </rect>
     </property>
     <property name="columnCount">
@@ -52,59 +52,83 @@
      </property>
     </column>
    </widget>
-   <widget class="QWidget" name="gridLayoutWidget">
+   <widget class="QCheckBox" name="Sports">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>231</width>
-      <height>80</height>
+      <x>92</x>
+      <y>11</y>
+      <width>65</width>
+      <height>20</height>
      </rect>
     </property>
-    <layout class="QGridLayout" name="News_Selections">
-     <item row="1" column="0">
-      <widget class="QCheckBox" name="Business">
-       <property name="text">
-        <string>Business</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QCheckBox" name="Entertainment">
-       <property name="text">
-        <string>Entertainment</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QCheckBox" name="Health">
-       <property name="text">
-        <string>Health</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QCheckBox" name="Science">
-       <property name="text">
-        <string>Science</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QCheckBox" name="Sports">
-       <property name="text">
-        <string>Sports</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QCheckBox" name="Technology">
-       <property name="text">
-        <string>Technology</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <property name="text">
+     <string>Sports</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="Technology">
+    <property name="geometry">
+     <rect>
+      <x>92</x>
+      <y>32</y>
+      <width>97</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Technology</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="Health">
+    <property name="geometry">
+     <rect>
+      <x>11</x>
+      <y>11</y>
+      <width>65</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Health</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="Business">
+    <property name="geometry">
+     <rect>
+      <x>11</x>
+      <y>32</y>
+      <width>80</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Business</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="Entertainment">
+    <property name="geometry">
+     <rect>
+      <x>92</x>
+      <y>53</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Entertainment</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="Science">
+    <property name="geometry">
+     <rect>
+      <x>11</x>
+      <y>53</y>
+      <width>73</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Science</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -112,8 +136,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>400</width>
-     <height>19</height>
+     <width>640</width>
+     <height>22</height>
     </rect>
    </property>
   </widget>

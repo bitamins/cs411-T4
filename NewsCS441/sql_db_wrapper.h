@@ -14,7 +14,7 @@ private:
 public:
     SQL_DB_WRAPPER();
     void get_Database();
-    string get_Query(string category);
+    QString get_Query(QString category);
 };
 
 #endif // SQL_DB_WRAPPER_H
