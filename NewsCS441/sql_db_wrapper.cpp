@@ -16,19 +16,15 @@ void SQL_DB_WRAPPER::get_Database(){
 
 string SQL_DB_WRAPPER::get_Query(string category){
     QSqlQuery query(db);
-    QString command = "SELECT * FROM ";
+    string command = "SELECT * FROM ";
            command = command.append(category);
-    qDebug() << "Data Retrieved: " << query.exec(command);
+    QString qcommand = QString::fromStdString(command);
+    qDebug() << "Data Retrieved: " << query.exec(qcommand);
     qDebug() << query.size();
+    QString qret = query.value(0).toString();
 
-
-    return query.value(0).toString();
-//    vector<string> tempVec;
-//    while(query.next()){
-//        tempVec.append(query.value(0).toString())
-//    }
+    return qret.toStdString();
 }
-
 /*
 
 QSqlQuery query(db);
