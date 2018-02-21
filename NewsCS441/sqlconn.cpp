@@ -42,3 +42,8 @@ QSqlQuery SQLConn::makeQuery(QString category, QString limit )
     q.exec(query);
     return q;
 }
+
+QSqlDatabase SQLConn::getDatabase()
+{
+    return db;
+}

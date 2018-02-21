@@ -14,6 +14,7 @@ public:
     bool getStatus();
     QSqlQuery makeQuery(QString, QString);
     void makeConnection(QString, QString);
+    QSqlDatabase getDatabase();
 protected:
     SQLConn();
 private:
