@@ -2,6 +2,6 @@ Front/start.sh
 
 # ignore anything that starts with build
 build*
-
+*.user
 # ignore anything with a squiggly line at the end
 *~
