@@ -50,6 +50,18 @@ QSqlQuery queryBuilder::execQuery()
     return finalQuery;
 }
 
+//allows query to be sorted by date if the argument is true then
+//the results will be sorted in ascending order otherwise it will be
+//sorted by descending order
+void queryBuilder::sort(bool asc)
+{
+    if(asc)
+        query += " ORDER BY pubDate ASC";
+     else
+        query += " ORDER BY pubDate DESC";
+}
+
+// allows the amount of results to be limited
 void queryBuilder::limitQuery(QString sizeLim)
 {
     query += " LIMIT " + sizeLim;

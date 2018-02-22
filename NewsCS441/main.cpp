@@ -25,21 +25,23 @@ int main(int argc, char *argv[])
     //makes a connection to to the database with specified username and password
     SQLConn::Instance()->makeConnection(userName, pass);
     //an example vector of keywords to look for
-    std::vector<QString> filterWords{"Bitcoin", "Economy"};
+    std::vector<QString> filterWords{"Bitcoin", "Economy", "Stock"};
     //creates a querybuilder object with the category Business and the database connection
     queryBuilder q("Business", SQLConn::Instance()->getDatabase());
     //sends filterWords to the query builder object and adds them to the query
     q.addFilterWords(filterWords);
-    //limits the query response to at most 10 results
+    //sorts the results by date in ascending order(pass false to sort by descending)
+    q.sort(true);
+    //limits the query response to at most 10 results(must be called last)
     q.limitQuery("10");
     //adds a semi-colon to end the query
     q.finalizeQuery();
     //executes the query and returns the result to QSqlQuery final
     QSqlQuery final = q.execQuery();
-    //loops through the query response and displays them in the console
+    //loops through the query response and displays the title and date in the console
     while(final.next())
     {
-        qDebug() << final.value(1).toString() << "\n";
+        qDebug() <<"Title: " << final.value(1).toString() << " Date: " << final.value(6).toString() << "\n";
     }
     return a.exec();
 }

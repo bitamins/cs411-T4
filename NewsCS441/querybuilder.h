@@ -11,7 +11,8 @@ public:
     void finalizeQuery();
     void limitQuery(QString sizeLim);
     QSqlQuery execQuery();
-
+    void addExclusionWords();
+    void sort(bool);
 private:
    QString query;
    QSqlQuery finalQuery;
