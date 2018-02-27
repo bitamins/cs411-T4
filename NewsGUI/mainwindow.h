@@ -2,8 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QSql>
-#include <QSqlDatabase>
+#include <QDebug>
+#include "querybuilder.h"
+#include "sqlconn.hpp"
 
 namespace Ui {
 class MainWindow;
@@ -15,11 +16,13 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
+    MainWindow(QString,QString,QWidget *parent = 0);
     ~MainWindow();
-    QSqlDatabase db;
 
 private slots:
+    void on_clearSettingsButton_clicked();
 
+    void on_updateSettingsButton_clicked();
 
 private:
     Ui::MainWindow *ui;

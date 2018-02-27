@@ -4,7 +4,7 @@
 #include <vector>
 #include "querybuilder.h"
 #include "sqlconn.hpp"
-#include <qDebug>
+#include <QDebug>
 int main(int argc, char *argv[])
 {
     //username and pass are retrieved from commandline arguments

@@ -1,14 +1,15 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2018-02-10T12:55:25
+# Project created by QtCreator 2018-02-26T19:17:56
 #
 #-------------------------------------------------
 
-QT       += core gui widgets sql
+QT       += core gui
+QT       += sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = NewsCS441
+TARGET = NewsGUI
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -29,12 +30,10 @@ SOURCES += \
         querybuilder.cpp \
         sqlconn.cpp
 
-
 HEADERS += \
         mainwindow.h \
         querybuilder.h \
         sqlconn.hpp
 
-
 FORMS += \
-    mainwindow.ui
+        mainwindow.ui
