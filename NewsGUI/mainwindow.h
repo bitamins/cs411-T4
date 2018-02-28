@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QDebug>
+#include <QSqlDatabase>
 #include "querybuilder.h"
 #include "sqlconn.hpp"
 
@@ -26,6 +27,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    QSqlDatabase database;
+    QueryBuilder queryBuilder;
 };
 
 #endif // MAINWINDOW_H

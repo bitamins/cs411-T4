@@ -3,19 +3,30 @@
 #include <vector>
 #include <QString>
 #include <QSqlQuery>
-class queryBuilder
+#include <QStringList>
+class QueryBuilder
 {
 public:
-    queryBuilder(QString, QSqlDatabase);
+
+    QueryBuilder();
     void addFilterWords(std::vector<QString>);
-    void finalizeQuery();
-    void limitQuery(QString sizeLim);
-    QSqlQuery execQuery();
+    void finalizeQueries();
+    void limitQuery(QString);
+    std::vector<QSqlQuery> execQueries();
     void addExclusionWords();
     void sort(bool);
+    void filterSource();
+    void clearQueries();
+    void addDatabase(QSqlDatabase databaseToAdd);
+    void initQueries(QStringList);
+    QSqlQuery execQuery();
+
+
 private:
    QString query;
-   QSqlQuery finalQuery;
+   QStringList queries;
+   std::vector<QSqlQuery> finalQueries;
+   QSqlDatabase database;
 };
 
 #endif // QUERYBUILDER_H

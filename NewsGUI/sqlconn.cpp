@@ -1,7 +1,9 @@
 #include "sqlconn.hpp"
 #include <QString>
 using namespace  std;
+
 SQLConn* SQLConn::_instance = 0;
+
 
 SQLConn* SQLConn::Instance()
 {
@@ -9,6 +11,7 @@ SQLConn* SQLConn::Instance()
     _instance = new SQLConn();
  return _instance;
 }
+
 
 SQLConn::SQLConn()
 {

@@ -10,17 +10,29 @@
 // now query.query will hold "SELECT * FROM Business"
 //the query can either be finalized through finalizeQuery, or it can by limited
 //or filter words can be added.
+
+/*
 queryBuilder::queryBuilder(QString cat, QSqlDatabase db)
 {
    finalQuery = QSqlQuery(db);
    query = "SELECT * FROM " + cat;
 }
+*/
+QueryBuilder::QueryBuilder()
+{
+;
+}
 
+/*
+QueryBuilder::QueryBuilder(QSqlDatabase initialDatabase)
+{
+    database = initialDatabase;
+}*/
 
 //allows filter words to be added to a query throught the use of LIKE command
 //filterwords are passed as a vector of Qstrings to the function
 //the filterwords are then added to the query string
-void queryBuilder::addFilterWords(std::vector<QString> filterWords)
+void QueryBuilder::addFilterWords(std::vector<QString> filterWords)
 {
     int i = 1;
 
@@ -37,32 +49,70 @@ void queryBuilder::addFilterWords(std::vector<QString> filterWords)
 }
 
 // finalizes the string by adding a semi-colon to the end
-void queryBuilder::finalizeQuery()
+void QueryBuilder::finalizeQueries()
 {
-    query += ";";
-
+    for(int i =0; i< queries.length();i++)
+    {
+        queries[i] += ";";
+    }
 }
 //only call this method after finalizeQuery has been called.
 //returns the result of the query
-QSqlQuery queryBuilder::execQuery()
+QSqlQuery QueryBuilder::execQuery()
 {
-    finalQuery.exec(query);
-    return finalQuery;
+    finalQueries[0].exec(query);
+    return finalQueries[0];
+}
+
+std::vector<QSqlQuery> QueryBuilder::execQueries()
+{
+    foreach(QString tempString, queries)
+    {
+        QSqlQuery tempQuery(database);
+        tempQuery.exec(tempString);
+        finalQueries.push_back(tempQuery);
+    }
+    return finalQueries;
+}
+
+void QueryBuilder::clearQueries()
+{
+    queries.clear();
+    finalQueries.clear();
+    query = "";
+}
+
+void QueryBuilder::addDatabase(QSqlDatabase databaseToAdd)
+{
+    database = databaseToAdd;
+}
+
+void QueryBuilder::initQueries(QStringList listOfCategories)
+{
+
+    foreach (QString t, listOfCategories)
+    {
+        QString temp = "SELECT * FROM " + t;
+        queries.append(temp);
+    }
 }
 
 //allows query to be sorted by date if the argument is true then
 //the results will be sorted in ascending order otherwise it will be
 //sorted by descending order
-void queryBuilder::sort(bool asc)
+void QueryBuilder::sort(bool asc)
 {
-    if(asc)
-        query += " ORDER BY pubDate ASC";
-     else
-        query += " ORDER BY pubDate DESC";
+    for(int i =0; i < queries.length(); i++)
+    {
+        if(asc)
+            queries[i] += " ORDER BY pubDate ASC";
+         else
+            queries[i] += " ORDER BY pubDate DESC";
+    }
 }
 
 // allows the amount of results to be limited
-void queryBuilder::limitQuery(QString sizeLim)
+void QueryBuilder::limitQuery(QString sizeLim)
 {
     query += " LIMIT " + sizeLim;
 }

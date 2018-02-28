@@ -6,21 +6,23 @@
 #include <string.h>
 #include <QString>
 using namespace std;
+
 class SQLConn
 {
-public:
+    public:
+        static SQLConn* Instance();
+        bool getStatus();
+        QSqlQuery makeQuery(QString, QString);
+        void makeConnection(QString, QString);
+        QSqlDatabase getDatabase();
 
-    static SQLConn* Instance();
-    bool getStatus();
-    QSqlQuery makeQuery(QString, QString);
-    void makeConnection(QString, QString);
-    QSqlDatabase getDatabase();
-protected:
-    SQLConn();
-private:
-    QSqlDatabase db;
-    static SQLConn* _instance;
-    bool status;
+    protected:
+        SQLConn();
+
+    private:
+        QSqlDatabase db;
+        static SQLConn* _instance;
+        bool status;
 
 };
 
