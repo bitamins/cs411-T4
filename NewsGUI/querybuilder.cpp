@@ -1,7 +1,7 @@
 #include "querybuilder.h"
 #include <QSqlQuery>
 #include <QSqlDatabase>
-
+#include <QDebug>
 //constructor for query builder, initializes a Qstring to start off with "SELECT"
 // and then adds "FROM" and the table name specified by the cat argument
 
@@ -85,6 +85,7 @@ void QueryBuilder::clearQueries()
 void QueryBuilder::addDatabase(QSqlDatabase databaseToAdd)
 {
     database = databaseToAdd;
+
 }
 
 void QueryBuilder::initQueries(QStringList listOfCategories)
@@ -92,7 +93,7 @@ void QueryBuilder::initQueries(QStringList listOfCategories)
 
     foreach (QString t, listOfCategories)
     {
-        QString temp = "SELECT * FROM " + t;
+        QString temp = "SELECT DISTINCT * FROM " + t;
         queries.append(temp);
     }
 }
@@ -115,4 +116,9 @@ void QueryBuilder::sort(bool asc)
 void QueryBuilder::limitQuery(QString sizeLim)
 {
     query += " LIMIT " + sizeLim;
+}
+
+std::vector<QSqlQuery> QueryBuilder::getFinalQueries()
+{
+    return finalQueries;
 }

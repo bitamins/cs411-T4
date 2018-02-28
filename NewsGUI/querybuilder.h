@@ -19,6 +19,7 @@ public:
     void clearQueries();
     void addDatabase(QSqlDatabase databaseToAdd);
     void initQueries(QStringList);
+    std::vector<QSqlQuery> getFinalQueries();
     QSqlQuery execQuery();
 
 

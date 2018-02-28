@@ -1,12 +1,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-
+#include <algorithm>
 #include <QMainWindow>
 #include <QDebug>
 #include <QSqlDatabase>
 #include "querybuilder.h"
 #include "sqlconn.hpp"
-
+#include <QDesktopServices>
+#include <QListWidget>
+#include <QUrl>
 namespace Ui {
 class MainWindow;
 }
@@ -24,6 +26,8 @@ private slots:
     void on_clearSettingsButton_clicked();
 
     void on_updateSettingsButton_clicked();
+
+    void on_newsListWidget_itemClicked(QListWidgetItem *item);
 
 private:
     Ui::MainWindow *ui;
