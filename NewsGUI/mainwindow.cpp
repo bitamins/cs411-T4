@@ -17,7 +17,8 @@ MainWindow::MainWindow(QString username, QString pass, QWidget *parent) :
     SQLConn::Instance();
     //establishes connection
     SQLConn::Instance()->makeConnection(username,pass);
-    qDebug()<<"created db connection";
+    db = SQLConn::Instance()->getDatabase();
+    qDebug()<<"Created db connection.";
 }
 
 MainWindow::~MainWindow()
