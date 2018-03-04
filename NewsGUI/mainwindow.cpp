@@ -36,6 +36,7 @@ void MainWindow::on_clearSettingsButton_clicked()
     //clear categories list
     ui->sourcesLineEdit->clear();
     ui->categoriesLineEdit->clear();
+    ui->newsListWidget->clear();
     queryBuilder.clearQueries();
 }
 
@@ -58,7 +59,7 @@ void MainWindow::on_updateSettingsButton_clicked()
     {
         while(queries[i].next())
         {
-            ui->newsListWidget->addItem(queries[i].value(1).toString());
+            ui->newsListWidget->addItem("Article: " + queries[i].value(1).toString());
         }
     }
 
