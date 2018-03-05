@@ -60,7 +60,11 @@ void MainWindow::on_updateSettingsButton_clicked()
         while(queries[i].next())
         {
             ui->newsListWidget->addItem("Article");
-            ui->newsListWidget->addItem(queries[i].value(1).toString());
+
+            QListWidgetItem *articleLink = new QListWidgetItem(ui->newsListWidget);
+            articleLink->setTextColor("red");
+            articleLink->setData(0, queries[i].value(1).toString());
+
             ui->newsListWidget->addItem("Description: " + queries[i].value(7).toString());
             ui->newsListWidget->addItem("Source: " + queries[i].value(2).toString());
             ui->newsListWidget->addItem("Picture: " + queries[i].value(5).toString());
