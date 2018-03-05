@@ -59,11 +59,10 @@ void MainWindow::on_updateSettingsButton_clicked()
     {
         while(queries[i].next())
         {
-            ui->newsListWidget->addItem("Article: " + queries[i].value(1).toString());
+            ui->newsListWidget->addItem("Article");
+            ui->newsListWidget->addItem(queries[i].value(1).toString());
             ui->newsListWidget->addItem("Description: " + queries[i].value(7).toString());
             ui->newsListWidget->addItem("Source: " + queries[i].value(2).toString());
-            //ui->newsListWidget->addItem(": " + queries[i].value(3).toString());
-            ui->newsListWidget->addItem("Link: " + queries[i].value(4).toString());
             ui->newsListWidget->addItem("Picture: " + queries[i].value(5).toString());
             ui->newsListWidget->addItem("Date: " + queries[i].value(6).toString());
             ui->newsListWidget->addItem(" ");
@@ -92,7 +91,6 @@ void MainWindow::on_newsListWidget_itemClicked(QListWidgetItem *item)
         queries[i].seek(-1);
         while(queries[i].next())
         {
-            qDebug() << queries[i].value(1);
             if(queries[i].value(1) == item->text())
             {
                 link = queries[i].value(4).toString();
