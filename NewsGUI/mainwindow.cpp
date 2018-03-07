@@ -44,6 +44,8 @@ void MainWindow::on_clearSettingsButton_clicked()
 
 void MainWindow::on_updateSettingsButton_clicked()
 {
+    queryBuilder.clearQueries();
+    ui->newsListWidget->clear();
     //get sources list
     QString source = ui->sourcesLineEdit->displayText();
     //get categories list
@@ -53,25 +55,24 @@ void MainWindow::on_updateSettingsButton_clicked()
     queryBuilder.initQueries(categoryList);
     //update the news list with the new news
     queryBuilder.sort(true);
-    queryBuilder.finalizeQueries();
-    std::vector<QSqlQuery> queries = queryBuilder.execQueries();
-    for(int i =0;i<queries.size();i++)
+    queryBuilder.finalizeQuery();
+    QSqlQuery query = queryBuilder.execQuery();
+    while(query.next())
     {
-        while(queries[i].next())
-        {
-            ui->newsListWidget->addItem("Article");
+        ui->newsListWidget->addItem("Article");
 
-            QListWidgetItem *articleLink = new QListWidgetItem(ui->newsListWidget);
-            articleLink->setTextColor("red");
-            articleLink->setData(0, queries[i].value(1).toString());
+        QListWidgetItem *articleLink = new QListWidgetItem(ui->newsListWidget);
+        articleLink->setTextColor("red");
+        articleLink->setData(0, query.value(1).toString());
 
-            ui->newsListWidget->addItem("Description: " + queries[i].value(7).toString());
-            ui->newsListWidget->addItem("Source: " + queries[i].value(2).toString());
-            ui->newsListWidget->addItem("Picture: " + queries[i].value(5).toString());
-            ui->newsListWidget->addItem("Date: " + queries[i].value(6).toString());
-            ui->newsListWidget->addItem(" ");
-        }
+        ui->newsListWidget->addItem("Description: " + query.value(DESCRIPTION).toString());
+        ui->newsListWidget->addItem("Source: " + query.value(SOURCE).toString());
+        ui->newsListWidget->addItem("Picture: " + query.value(IMAGE).toString());
+        ui->newsListWidget->addItem("Date: " + query.value(DATE).toString());
+        ui->newsListWidget->addItem("Category: " + query.value(CATEGORY).toString());
+        ui->newsListWidget->addItem(" ");
     }
+
 
 }
 
@@ -87,26 +88,19 @@ void MainWindow::on_newsListWidget_itemClicked(QListWidgetItem *item)
 
     QString link;
     qDebug() << item->text() << " clicked";
-    bool _continue = true;
-    std::vector<QSqlQuery> queries = queryBuilder.getFinalQueries();
+    QSqlQuery query = queryBuilder.getFinalQuery();
+    query.seek(-1);
 
-    for(int i = 0; i < queries.size();i++)
+    while(query.next())
     {
-        queries[i].seek(-1);
-        while(queries[i].next())
+        if(query.value(1) == item->text())
         {
-            if(queries[i].value(1) == item->text())
-            {
-                link = queries[i].value(4).toString();
-                _continue = false;
-                break;
-
-            }
-            if(!_continue)
-                continue;
+            link = query.value(URL).toString();
+            break;
         }
+
     }
 
-      QDesktopServices::openUrl(QUrl(link));
+    QDesktopServices::openUrl(QUrl(link));
 
 }
