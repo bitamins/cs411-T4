@@ -11,13 +11,21 @@ run: make
 # Install mysql++
 sudo apt-get install libmysqlclient-dev libmysqld-dev libmysql++-dev libmysql++-doc libmysql++3v5
 
+<<<<<<< HEAD
 # Install Qt5
 beware it is huge (6.5+ MB)
 wget http://download.qt.io/official_releases/qt/5.7/5.7.0/qt-opensource-linux-x64-5.7.0.run
+=======
+# Using QT
+make sure to put `build*` is in your local .gitignore file to not push the build contents. Plus it should already be there if you pull this repo correctly.
+>>>>>>> b2ui
 
 # How to use this repo
 https://code.tutsplus.com/tutorials/how-to-collaborate-on-github--net-34267
 
 always push to development, then when development works we can merge it with master.
+<<<<<<< HEAD
 
 hi
+=======
+>>>>>>> b2ui
