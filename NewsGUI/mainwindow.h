@@ -29,8 +29,11 @@ private slots:
 
     void on_newsListWidget_itemClicked(QListWidgetItem *item);
 
+    void on_actionSettings_triggered();
+
 private:
     Ui::MainWindow *ui;
+    QWidget settingsWindow;
     QSqlDatabase database;
     QueryBuilder queryBuilder;
 };

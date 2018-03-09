@@ -15,6 +15,14 @@ MainWindow::MainWindow(QString username, QString pass, QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    //create Settings separate window
+    //QWidget* settingsWindow = new QWidget();
+    QLayout* settingsGrid = new QGridLayout();
+    settingsWindow.setWindowFlags(Qt::Window);
+    settingsWindow.setLayout(settingsGrid);
+    settingsGrid->addWidget(ui->settingsGroupBox);
+
     //create SQLConn object pointer
     SQLConn::Instance();
     //establishes connection
@@ -109,4 +117,9 @@ void MainWindow::on_newsListWidget_itemClicked(QListWidgetItem *item)
 
       QDesktopServices::openUrl(QUrl(link));
 
+}
+
+void MainWindow::on_actionSettings_triggered()
+{
+    settingsWindow.show();
 }
