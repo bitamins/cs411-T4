@@ -9,6 +9,7 @@
 #include <QDesktopServices>
 #include <QListWidget>
 #include <QUrl>
+#include <QSqlError>
 namespace Ui {
 class MainWindow;
 }
@@ -30,6 +31,8 @@ private slots:
     void on_newsListWidget_itemClicked(QListWidgetItem *item);
 
     void on_actionSettings_triggered();
+
+    void on_lineEdit_returnPressed();
 
 private:
     Ui::MainWindow *ui;

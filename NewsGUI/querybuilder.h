@@ -4,29 +4,31 @@
 #include <QString>
 #include <QSqlQuery>
 #include <QStringList>
+enum COLUMNS{ID, TITLE, SOURCE, AUTHOR, URL, IMAGE, DATE, DESCRIPTION, CATEGORY};
 class QueryBuilder
 {
 public:
 
     QueryBuilder();
-    void addFilterWords(std::vector<QString>);
-    void finalizeQueries();
+    void addFilterWords(QStringList);
+    void finalizeQuery();
     void limitQuery(QString);
     std::vector<QSqlQuery> execQueries();
     void addExclusionWords();
     void sort(bool);
+    void initManual(QStringList);
     void filterSource();
     void clearQueries();
     void addDatabase(QSqlDatabase databaseToAdd);
     void initQueries(QStringList);
-    std::vector<QSqlQuery> getFinalQueries();
+    QSqlQuery getFinalQuery();
     QSqlQuery execQuery();
 
 
 private:
-   QString query;
-   QStringList queries;
-   std::vector<QSqlQuery> finalQueries;
+   QString queryString;
+   QSqlQuery query;
+   bool final;
    QSqlDatabase database;
 };
 

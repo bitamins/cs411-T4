@@ -11,114 +11,108 @@
 //the query can either be finalized through finalizeQuery, or it can by limited
 //or filter words can be added.
 
-/*
-queryBuilder::queryBuilder(QString cat, QSqlDatabase db)
-{
-   finalQuery = QSqlQuery(db);
-   query = "SELECT * FROM " + cat;
-}
-*/
 QueryBuilder::QueryBuilder()
 {
-;
+    qDebug() << "Initializing queryBuilder";
 }
 
-/*
-QueryBuilder::QueryBuilder(QSqlDatabase initialDatabase)
-{
-    database = initialDatabase;
-}*/
+
 
 //allows filter words to be added to a query throught the use of LIKE command
 //filterwords are passed as a vector of Qstrings to the function
 //the filterwords are then added to the query string
-void QueryBuilder::addFilterWords(std::vector<QString> filterWords)
+void QueryBuilder::addFilterWords(QStringList filterWords)
 {
     int i = 1;
 
-    query += " WHERE ";
+    queryString += " WHERE ";
     foreach(QString s, filterWords)
     {
 
         if(i++ != filterWords.size())//if theres more filter words add an or
-            query += "title LIKE '%" + s +"%' OR ";
+            queryString += "title LIKE '%" + s +"%' OR ";
         else//otherwise just end the string
-            query += "title LIKE '%" + s +"%'";
+            queryString += "title LIKE '%" + s +"%'";
 
     }
 }
 
 // finalizes the string by adding a semi-colon to the end
-void QueryBuilder::finalizeQueries()
+void QueryBuilder::finalizeQuery()
 {
-    for(int i =0; i< queries.length();i++)
-    {
-        queries[i] += ";";
-    }
+        queryString += ";";
+        final = true;
 }
+
 //only call this method after finalizeQuery has been called.
 //returns the result of the query
 QSqlQuery QueryBuilder::execQuery()
 {
-    finalQueries[0].exec(query);
-    return finalQueries[0];
-}
-
-std::vector<QSqlQuery> QueryBuilder::execQueries()
-{
-    foreach(QString tempString, queries)
+    if(final)
     {
-        QSqlQuery tempQuery(database);
-        tempQuery.exec(tempString);
-        finalQueries.push_back(tempQuery);
+        query = QSqlQuery(database);
+        query.exec(queryString);
+        return query;
     }
-    return finalQueries;
+    return query;
 }
 
 void QueryBuilder::clearQueries()
 {
-    queries.clear();
-    finalQueries.clear();
-    query = "";
+    queryString = "";
+    query.clear();
 }
 
 void QueryBuilder::addDatabase(QSqlDatabase databaseToAdd)
 {
     database = databaseToAdd;
-
 }
 
 void QueryBuilder::initQueries(QStringList listOfCategories)
 {
+        int i = 0;
+        queryString = "SELECT DISTINCT * FROM News WHERE ";
+        foreach(QString category, listOfCategories)
+        {
+            queryString += "category='" + category +"'";
+            if(i++ != listOfCategories.size() - 1)
+                 queryString +=" OR ";
+        }
 
-    foreach (QString t, listOfCategories)
+
+}
+
+void QueryBuilder::initManual(QStringList columns)
+{
+    int i = 0;
+    queryString = "SELECT DISTINCT ";
+    foreach(QString column, columns)
     {
-        QString temp = "SELECT DISTINCT * FROM " + t;
-        queries.append(temp);
+        if(i++ != columns.size() -1)
+            queryString += column + ", ";
+        else
+            queryString += column + " ";
     }
 }
 
 //allows query to be sorted by date if the argument is true then
 //the results will be sorted in ascending order otherwise it will be
 //sorted by descending order
-void QueryBuilder::sort(bool asc)
+void QueryBuilder::sort(bool ascending)
 {
-    for(int i =0; i < queries.length(); i++)
-    {
-        if(asc)
-            queries[i] += " ORDER BY pubDate ASC";
+        if(ascending)
+            queryString += " ORDER BY pubDate ASC";
          else
-            queries[i] += " ORDER BY pubDate DESC";
-    }
+            queryString += " ORDER BY pubDate DESC";
 }
 
 // allows the amount of results to be limited
 void QueryBuilder::limitQuery(QString sizeLim)
 {
-    query += " LIMIT " + sizeLim;
+    queryString += " LIMIT " + sizeLim;
 }
 
-std::vector<QSqlQuery> QueryBuilder::getFinalQueries()
+QSqlQuery QueryBuilder::getFinalQuery()
 {
-    return finalQueries;
+    return query;
 }

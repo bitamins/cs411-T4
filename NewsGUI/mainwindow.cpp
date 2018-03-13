@@ -14,23 +14,35 @@ MainWindow::MainWindow(QString username, QString pass, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
+        ui->setupUi(this);
+        //create Settings separate window
+        //QWidget* settingsWindow = new QWidget();
+        QLayout* settingsGrid = new QGridLayout();
+        settingsWindow.setWindowFlags(Qt::Window);
+        settingsWindow.setLayout(settingsGrid);
+        settingsGrid->addWidget(ui->settingsGroupBox);
+        //create SQLConn object pointer
+        SQLConn::Instance();
+        QStringList columns{"source"};
+        //establishes connection
+        SQLConn::Instance()->makeConnection(username,pass);
+        database = SQLConn::Instance()->getDatabase();
+        if(database.isOpen())
+            qDebug()<<"Created db connection.";
+        else
+        {
+            qDebug()<<"Failed to connect to database";
+            qDebug()<<"Database error " << database.lastError();
+        }
+        queryBuilder.addDatabase(database);
+        queryBuilder.initManual(columns);
+        queryBuilder.finalizeQuery();
+        QSqlQuery sourcesQuery = queryBuilder.execQuery();
+        QStringList sourcesString;
+        while(sourcesQuery.next())
+            sourcesString.append(sourcesQuery.value(0).toString());
 
-    //create Settings separate window
-    //QWidget* settingsWindow = new QWidget();
-    QLayout* settingsGrid = new QGridLayout();
-    settingsWindow.setWindowFlags(Qt::Window);
-    settingsWindow.setLayout(settingsGrid);
-    settingsGrid->addWidget(ui->settingsGroupBox);
-
-    //create SQLConn object pointer
-    SQLConn::Instance();
-    //establishes connection
-    SQLConn::Instance()->makeConnection(username,pass);
-    database = SQLConn::Instance()->getDatabase();
-    qDebug()<<"Created db connection.";
-
-    queryBuilder.addDatabase(database);
+        sourcesQuery.clear();
 }
 
 MainWindow::~MainWindow()
@@ -52,34 +64,33 @@ void MainWindow::on_clearSettingsButton_clicked()
 
 void MainWindow::on_updateSettingsButton_clicked()
 {
-    //get sources list
-    QString source = ui->sourcesLineEdit->displayText();
-    //get categories list
-    QString category = ui->categoriesLineEdit->displayText();
-    QStringList categoryList(parseList(category));
-    //query the data base for the list of news
-    queryBuilder.initQueries(categoryList);
-    //update the news list with the new news
-    queryBuilder.sort(true);
-    queryBuilder.finalizeQueries();
-    std::vector<QSqlQuery> queries = queryBuilder.execQueries();
-    for(int i =0;i<queries.size();i++)
-    {
-        while(queries[i].next())
+        queryBuilder.clearQueries();
+        ui->newsListWidget->clear();
+        //get sources list
+        QString source = ui->sourcesLineEdit->displayText();
+        //get categories list
+        QString category = ui->categoriesLineEdit->displayText();
+        QStringList categoryList(parseList(category));
+        //query the data base for the list of news
+        queryBuilder.initQueries(categoryList);
+        //update the news list with the new news
+        queryBuilder.sort(true);
+        queryBuilder.finalizeQuery();
+        QSqlQuery query = queryBuilder.execQuery();
+        while(query.next())
         {
             ui->newsListWidget->addItem("Article");
 
             QListWidgetItem *articleLink = new QListWidgetItem(ui->newsListWidget);
             articleLink->setTextColor("red");
-            articleLink->setData(0, queries[i].value(1).toString());
-
-            ui->newsListWidget->addItem("Description: " + queries[i].value(7).toString());
-            ui->newsListWidget->addItem("Source: " + queries[i].value(2).toString());
-            ui->newsListWidget->addItem("Picture: " + queries[i].value(5).toString());
-            ui->newsListWidget->addItem("Date: " + queries[i].value(6).toString());
+            articleLink->setData(0, query.value(1).toString());
+            ui->newsListWidget->addItem("Description: " + query.value(DESCRIPTION).toString());
+            ui->newsListWidget->addItem("Source: " + query.value(SOURCE).toString());
+            ui->newsListWidget->addItem("Picture: " + query.value(IMAGE).toString());
+            ui->newsListWidget->addItem("Date: " + query.value(DATE).toString());
+            ui->newsListWidget->addItem("Category: " + query.value(CATEGORY).toString());
             ui->newsListWidget->addItem(" ");
         }
-    }
 
 }
 
@@ -95,31 +106,28 @@ void MainWindow::on_newsListWidget_itemClicked(QListWidgetItem *item)
 
     QString link;
     qDebug() << item->text() << " clicked";
-    bool _continue = true;
-    std::vector<QSqlQuery> queries = queryBuilder.getFinalQueries();
-
-    for(int i = 0; i < queries.size();i++)
+    QSqlQuery query = queryBuilder.getFinalQuery();
+    query.seek(-1);
+    while(query.next())
     {
-        queries[i].seek(-1);
-        while(queries[i].next())
+        if(query.value(1) == item->text())
         {
-            if(queries[i].value(1) == item->text())
-            {
-                link = queries[i].value(4).toString();
-                _continue = false;
-                break;
-
-            }
-            if(!_continue)
-                continue;
+            link = query.value(URL).toString();
+            break;
         }
+
     }
 
-      QDesktopServices::openUrl(QUrl(link));
+    QDesktopServices::openUrl(QUrl(link));
 
 }
 
 void MainWindow::on_actionSettings_triggered()
 {
     settingsWindow.show();
+}
+
+void MainWindow::on_lineEdit_returnPressed()
+{
+
 }
