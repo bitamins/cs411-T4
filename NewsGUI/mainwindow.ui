@@ -86,14 +86,14 @@
        <item row="2" column="0" colspan="2">
         <widget class="QGroupBox" name="datesGroupBox">
          <property name="title">
-          <string>Dates</string>
+          <string>Dates - mm/dd/yyyy</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_5">
-          <item row="0" column="0">
-           <widget class="QLineEdit" name="dateFromLineEdit"/>
-          </item>
           <item row="0" column="1">
            <widget class="QLineEdit" name="dateToLineEdit"/>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLineEdit" name="dateFromLineEdit"/>
           </item>
          </layout>
         </widget>
