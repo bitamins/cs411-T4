@@ -67,20 +67,44 @@ void MainWindow::on_updateSettingsButton_clicked()
     {
         while(queries[i].next())
         {
-            ui->newsListWidget->addItem("Article");
 
-            QListWidgetItem *articleLink = new QListWidgetItem(ui->newsListWidget);
-            articleLink->setTextColor("red");
-            articleLink->setData(0, queries[i].value(1).toString());
+//            ui->newsListWidget->addItem("Article");
 
-            ui->newsListWidget->addItem("Description: " + queries[i].value(7).toString());
-            ui->newsListWidget->addItem("Source: " + queries[i].value(2).toString());
-            ui->newsListWidget->addItem("Picture: " + queries[i].value(5).toString());
-            ui->newsListWidget->addItem("Date: " + queries[i].value(6).toString());
-            ui->newsListWidget->addItem(" ");
+//            QListWidgetItem *articleLink = new QListWidgetItem(ui->newsListWidget);
+//            articleLink->setTextColor("red");
+//            articleLink->setData(0, queries[i].value(1).toString());
+
+//            ui->newsListWidget->addItem("Description: " + queries[i].value(7).toString());
+//            ui->newsListWidget->addItem("Source: " + queries[i].value(2).toString());
+//            ui->newsListWidget->addItem("Picture: " + queries[i].value(5).toString());
+//            ui->newsListWidget->addItem("Date: " + queries[i].value(6).toString());
+//            ui->newsListWidget->addItem(" ");
+
+            QListWidgetItem *item = new QListWidgetItem();
+            //item->setData(0, queries[i].value(1).toString());
+
+
+            item->setSizeHint(QSize(0,100));
+
+            QWidget *newWidget = new QWidget();
+            QLayout *newGrid = new QGridLayout();
+
+            QLabel *destLabel = new QLabel("Description: " + queries[i].value(7).toString());
+            QLabel *srcLabel = new QLabel("Source: " + queries[i].value(2).toString());
+            QLabel *picLabel = new QLabel("Picture: " + queries[i].value(5).toString());
+            QLabel *datLabel = new QLabel("Date: " + queries[i].value(6).toString());
+            newGrid->addWidget(destLabel);
+            newGrid->addWidget(srcLabel);
+            newGrid->addWidget(picLabel);
+            newGrid->addWidget(datLabel);
+            newWidget->setLayout(newGrid);
+
+         //   newWidget->setData(0, queries[i].value(1).toString());
+
+            ui->newsListWidget->addItem(item);
+            ui->newsListWidget->setItemWidget(item,newWidget);
         }
     }
-
 }
 
 QStringList parseList(QString list)

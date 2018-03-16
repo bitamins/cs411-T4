@@ -9,6 +9,7 @@
 #include <QDesktopServices>
 #include <QListWidget>
 #include <QUrl>
+#include <QLabel>
 namespace Ui {
 class MainWindow;
 }
