@@ -145,5 +145,5 @@ void MainWindow::on_newsListWidget_itemClicked(QListWidgetItem *item)
 
 void MainWindow::on_actionSettings_triggered()
 {
-    settingsWindow.show();
+    settingsWindow.exec();
 }

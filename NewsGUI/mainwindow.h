@@ -10,6 +10,7 @@
 #include <QListWidget>
 #include <QUrl>
 #include <QLabel>
+#include <QDialog>
 namespace Ui {
 class MainWindow;
 }
@@ -34,7 +35,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    QWidget settingsWindow;
+    QDialog settingsWindow;
     QSqlDatabase database;
     QueryBuilder queryBuilder;
 };
