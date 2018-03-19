@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QSettings>
 
 QStringList parseList(QString);
 MainWindow::MainWindow(QWidget *parent) :
@@ -30,11 +31,20 @@ MainWindow::MainWindow(QString username, QString pass, QWidget *parent) :
     database = SQLConn::Instance()->getDatabase();
     qDebug()<<"Created db connection.";
 
+    QSettings settings("RealNews", "NewsFetcher");
+    //Retrieve categories settings and settings
+    ui->categoriesLineEdit->setText(settings.value("CategoriesFilterText", "").toString());
+    ui->sourcesLineEdit->setText(settings.value("SourcesFilterText", "").toString());
+
     queryBuilder.addDatabase(database);
 }
 
 MainWindow::~MainWindow()
 {
+     QSettings settings("RealNews", "NewsFetcher");
+     settings.setValue("CategoriesFilterText", ui->categoriesLineEdit->text());
+     settings.setValue("SourcesFilterText", ui->sourcesLineEdit->text());
+
     delete ui;
 }
 
