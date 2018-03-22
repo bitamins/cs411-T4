@@ -1,5 +1,7 @@
 Front/start.sh
 
+.DS_Store
+
 # ignore anything that starts with build
 build*
 *.user
