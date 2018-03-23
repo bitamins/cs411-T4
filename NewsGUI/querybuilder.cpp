@@ -2,123 +2,158 @@
 #include <QSqlQuery>
 #include <QSqlDatabase>
 #include <QDebug>
-//constructor for query builder, initializes a Qstring to start off with "SELECT"
-// and then adds "FROM" and the table name specified by the cat argument
+#include "querybuilder.h"
+#include <QSqlQuery>
+#include <QSqlDatabase>
+#include <QDebug>
+//constructor for query builder
 
-//example usage: QueryBuilder query(columns,"Business");
-
-// now query.query will hold "SELECT * FROM Business"
-//the query can either be finalized through finalizeQuery, or it can by limited
-//or filter words can be added.
-
-/*
-queryBuilder::queryBuilder(QString cat, QSqlDatabase db)
-{
-   finalQuery = QSqlQuery(db);
-   query = "SELECT * FROM " + cat;
-}
-*/
 QueryBuilder::QueryBuilder()
 {
-;
+    qDebug() << "Initializing queryBuilder";
+    containsCategories = false;
+    containsFilterWords = false;
+    containsSources = false;
+    queryString = "";
 }
 
-/*
-QueryBuilder::QueryBuilder(QSqlDatabase initialDatabase)
-{
-    database = initialDatabase;
-}*/
+
 
 //allows filter words to be added to a query throught the use of LIKE command
 //filterwords are passed as a vector of Qstrings to the function
 //the filterwords are then added to the query string
-void QueryBuilder::addFilterWords(std::vector<QString> filterWords)
+void QueryBuilder::addFilterWords(QStringList filterWords)
 {
     int i = 1;
-
-    query += " WHERE ";
+    if(!queryString.contains("WHERE"))
+        queryString += " WHERE ";
+    int insertionIndex = queryString.indexOf("WHERE") + 6;
+    if(filterWords.size()>0)
+        containsFilterWords = true;
+    else
+        return;
+    queryString.insert(insertionIndex,"(");
+    insertionIndex++;
     foreach(QString s, filterWords)
     {
 
-        if(i++ != filterWords.size())//if theres more filter words add an or
-            query += "title LIKE '%" + s +"%' OR ";
+        if(i++ != 1)//if theres more filter words add an or
+            queryString.insert(insertionIndex, "title LIKE '%" + s + "%' OR description LIKE '%" + s +"%' OR ");
         else//otherwise just end the string
-            query += "title LIKE '%" + s +"%'";
+            queryString.insert(insertionIndex, "title LIKE '%" + s + "%' OR description LIKE '%" + s +"%') AND ");
 
     }
 }
 
 // finalizes the string by adding a semi-colon to the end
-void QueryBuilder::finalizeQueries()
+void QueryBuilder::finalizeQuery()
 {
-    for(int i =0; i< queries.length();i++)
-    {
-        queries[i] += ";";
-    }
+        queryString += ";";
+        final = true;
 }
+
 //only call this method after finalizeQuery has been called.
 //returns the result of the query
 QSqlQuery QueryBuilder::execQuery()
 {
-    finalQueries[0].exec(query);
-    return finalQueries[0];
-}
-
-std::vector<QSqlQuery> QueryBuilder::execQueries()
-{
-    foreach(QString tempString, queries)
+    if(final)
     {
-        QSqlQuery tempQuery(database);
-        tempQuery.exec(tempString);
-        finalQueries.push_back(tempQuery);
+        query = QSqlQuery(database);
+        query.exec(queryString);
+        return query;
     }
-    return finalQueries;
+    return query;
 }
 
-void QueryBuilder::clearQueries()
+void QueryBuilder::clearQuery()
 {
-    queries.clear();
-    finalQueries.clear();
-    query = "";
+    queryString = "";
+    query.clear();
+    final = false;
+    containsFilterWords = false;
 }
 
 void QueryBuilder::addDatabase(QSqlDatabase databaseToAdd)
 {
     database = databaseToAdd;
+}
+
+void QueryBuilder::initQuery(QStringList listOfCategories)
+{
+        int i = 0;
+        queryString = "SELECT DISTINCT * FROM News WHERE (";
+        foreach(QString category, listOfCategories)
+        {
+            queryString += "category='" + category +"'";
+            if(i++ != listOfCategories.size() - 1)
+                 queryString +=" OR ";
+        }
+        queryString += ")";
 
 }
 
-void QueryBuilder::initQueries(QStringList listOfCategories)
+void QueryBuilder::initManual(QStringList columns)
 {
-
-    foreach (QString t, listOfCategories)
+    int i = 0;
+    queryString = "SELECT DISTINCT ";
+    foreach(QString column, columns)
     {
-        QString temp = "SELECT DISTINCT * FROM " + t;
-        queries.append(temp);
+        if(i++ != columns.size() -1)
+            queryString += column + ", ";
+        else
+            queryString += column + " ";
     }
+    queryString += "FROM News";
 }
 
 //allows query to be sorted by date if the argument is true then
 //the results will be sorted in ascending order otherwise it will be
 //sorted by descending order
-void QueryBuilder::sort(bool asc)
+void QueryBuilder::sort(bool ascending)
 {
-    for(int i =0; i < queries.length(); i++)
-    {
-        if(asc)
-            queries[i] += " ORDER BY pubDate ASC";
+        if(ascending)
+            queryString += " ORDER BY pubDate ASC";
          else
-            queries[i] += " ORDER BY pubDate DESC";
-    }
+            queryString += " ORDER BY pubDate DESC";
 }
 
 // allows the amount of results to be limited
 void QueryBuilder::limitQuery(QString sizeLim)
 {
-    query += " LIMIT " + sizeLim;
+    queryString += " LIMIT " + sizeLim;
 }
 
-std::vector<QSqlQuery> QueryBuilder::getFinalQueries()
+void QueryBuilder::addSources(QStringList sources)
 {
-    return finalQueries;
+    int i = 1;
+    if(!queryString.contains("WHERE"))
+        queryString += " WHERE ";
+    int insertionIndex = queryString.indexOf("WHERE") + 6;
+    if(sources.size()<1)
+        return;
+    queryString.insert(insertionIndex,"(");
+    insertionIndex++;
+    foreach(QString s, sources)
+    {
+
+        if(i++ != 1)//if theres more filter words add an or
+            queryString.insert(insertionIndex, "source='" + s + "' OR ");
+        else//otherwise just end the string
+            queryString.insert(insertionIndex, "source='" + s + "') AND ");
+
+    }
+}
+void QueryBuilder::filterDate(QDate begin, QDate end)
+{
+    QString date = "(pubDate BETWEEN '" + begin.toString(Qt::ISODate) + " 00:00:00' AND '" + end.toString(Qt::ISODate) +" 23:59:59') AND ";
+    if(!queryString.contains("WHERE"))
+        queryString += " WHERE ";
+    int insertionIndex = queryString.indexOf("WHERE") + 6;
+
+    queryString.insert(insertionIndex, date);
+
+}
+QSqlQuery QueryBuilder::getFinalQuery()
+{
+    return query;
 }

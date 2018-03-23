@@ -1,8 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QSettings>
 
 QStringList parseList(QString);
+QSqlDatabase startDb(QString, QString);
+void errorCheck(QSqlDatabase);
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -13,39 +15,96 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::MainWindow(QString username, QString pass, QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    settings("RealNews", "NewsFetcher")
 {
     ui->setupUi(this);
-
+    limitDate = false;
     //create Settings separate window
     //QWidget* settingsWindow = new QWidget();
     QLayout* settingsGrid = new QGridLayout();
     settingsWindow.setWindowFlags(Qt::Window);
     settingsWindow.setLayout(settingsGrid);
-    settingsGrid->addWidget(ui->settingsGroupBox);
 
-    //create SQLConn object pointer
-    SQLConn::Instance();
-    //establishes connection
-    SQLConn::Instance()->makeConnection(username,pass);
-    database = SQLConn::Instance()->getDatabase();
-    qDebug()<<"Created db connection.";
+    database = startDb(username,pass);
 
-    QSettings settings("RealNews", "NewsFetcher");
+
     //Retrieve categories settings and settings
-    ui->categoriesLineEdit->setText(settings.value("CategoriesFilterText", "").toString());
-    ui->sourcesLineEdit->setText(settings.value("SourcesFilterText", "").toString());
+    activeSources = settings.value("SourcesList").value<QStringList>();
+    activeCategories = settings.value("CategoriesList").value<QStringList>();
+    filterList = settings.value("FilterList").value<QStringList>();
+    limitDate = settings.value("LimitDate").value<bool>();
+    if(limitDate)
+    {
+        ui->dateCheckBox->setChecked(true);
+        begin = settings.value("BeginDate").value<QDate>();
+        end = settings.value("EndDate").value<QDate>();
+        ui->fromDateEdit->setDate(begin);
+        ui->toDateEdit->setDate(end);
+    }
+    //ui->categoriesLineEdit->setText(settings.value("CategoriesFilterText", "").toString());
+    //ui->sourcesLineEdit->setText(settings.value("SourcesFilterText", "").toString());
 
-    queryBuilder.addDatabase(database);
+    driver();
+
+    settingsGrid->addWidget(ui->settingsGroupBox);
 }
 
 MainWindow::~MainWindow()
 {
-     QSettings settings("RealNews", "NewsFetcher");
-     settings.setValue("CategoriesFilterText", ui->categoriesLineEdit->text());
-     settings.setValue("SourcesFilterText", ui->sourcesLineEdit->text());
-
+    //settings.setValue("CategoriesFilterText", ui->categoriesLineEdit->text());
+    //settings.setValue("SourcesFilterText", ui->sourcesLineEdit->text());
+    settings.setValue("SourcesList", QVariant::fromValue(activeSources));
+    settings.setValue("CategoriesList", QVariant::fromValue(activeCategories));
+    settings.setValue("FilterList", QVariant::fromValue(filterList));
+    settings.setValue("LimitDate", QVariant::fromValue(limitDate));
+    if(limitDate)
+    {
+        settings.setValue("BeginDate", QVariant::fromValue(begin));
+        settings.setValue("EndDate", QVariant::fromValue(end));
+    }
     delete ui;
+}
+void MainWindow::driver()
+{
+    errorCheck(database);
+    queryBuilder.addDatabase(database);
+    setupCategories();
+    setupSources();
+    restoreSettings();
+}
+void MainWindow::setupCategories()
+{
+    QStringList categories = {"Sports", "Entertainment", "Technology", "Business", "Health", "Science"};
+    QStringListIterator categoriesIterator(categories);
+    while(categoriesIterator.hasNext())
+    {
+        QListWidgetItem *listItem = new QListWidgetItem(categoriesIterator.next());
+        listItem->setCheckState(Qt::Unchecked);
+        ui->categoryListWidget->addItem(listItem);
+    }
+}
+
+void MainWindow::setupSources()
+{
+    QStringList columns = {"source"};
+    queryBuilder.initManual(columns);
+    queryBuilder.finalizeQuery();
+    QSqlQuery sourcesQuery = queryBuilder.execQuery();
+
+    while(sourcesQuery.next())
+        sources.append(sourcesQuery.value(0).toString());
+    sources.sort();
+
+    QStringListIterator sourceIterator(sources);
+
+    while(sourceIterator.hasNext())
+    {
+        QListWidgetItem *listItem = new QListWidgetItem(sourceIterator.next());
+        listItem->setCheckState(Qt::Unchecked);
+        ui->sourcesListWidget->addItem(listItem);
+    }
+
 }
 
 void MainWindow::on_clearSettingsButton_clicked()
@@ -53,107 +112,184 @@ void MainWindow::on_clearSettingsButton_clicked()
     //clear sources list
     //clear categories list
     ui->sourcesLineEdit->clear();
-    ui->categoriesLineEdit->clear();
     ui->newsListWidget->clear();
-    queryBuilder.clearQueries();
+    queryBuilder.clearQuery();
 }
 
+void MainWindow::restoreSettings()
+{
+    if(ui->sourcesListWidget->count() > 0)
+    {
+        foreach(QString source, activeSources)
+        {
+            QListWidgetItem* widget = ui->sourcesListWidget->findItems(source, Qt::MatchExactly)[0];
+            widget->setCheckState(Qt::Checked);
+        }
+    }
 
-
+    if(ui->categoryListWidget->count() > 0)
+    {
+        foreach(QString category, activeCategories)
+        {
+            QListWidgetItem* widget = ui->categoryListWidget->findItems(category, Qt::MatchExactly)[0];
+            widget->setCheckState(Qt::Checked);
+        }
+    }
+    on_updateSettingsButton_clicked();
+}
 void MainWindow::on_updateSettingsButton_clicked()
 {
-    //get sources list
-    QString source = ui->sourcesLineEdit->displayText();
-    //get categories list
-    QString category = ui->categoriesLineEdit->displayText();
-    QStringList categoryList(parseList(category));
-    //query the data base for the list of news
-    queryBuilder.initQueries(categoryList);
-    //update the news list with the new news
-    queryBuilder.sort(true);
-    queryBuilder.finalizeQueries();
-    std::vector<QSqlQuery> queries = queryBuilder.execQueries();
-    for(int i =0;i<queries.size();i++)
+    begin = ui->fromDateEdit->date();
+    end = ui->toDateEdit->date();
+    qDebug() << "begin: " <<  begin.toString() << " end: " << end.toString();
+    if(begin > end)
     {
-        while(queries[i].next())
-        {
-
-//            ui->newsListWidget->addItem("Article");
-
-//            QListWidgetItem *articleLink = new QListWidgetItem(ui->newsListWidget);
-//            articleLink->setTextColor("red");
-//            articleLink->setData(0, queries[i].value(1).toString());
-
-//            ui->newsListWidget->addItem("Description: " + queries[i].value(7).toString());
-//            ui->newsListWidget->addItem("Source: " + queries[i].value(2).toString());
-//            ui->newsListWidget->addItem("Picture: " + queries[i].value(5).toString());
-//            ui->newsListWidget->addItem("Date: " + queries[i].value(6).toString());
-//            ui->newsListWidget->addItem(" ");
-
-            QListWidgetItem *item = new QListWidgetItem();
-            //item->setData(0, queries[i].value(1).toString());
-
-
-            item->setSizeHint(QSize(0,100));
-
-            QWidget *newWidget = new QWidget();
-            QLayout *newGrid = new QGridLayout();
-
-            QLabel *destLabel = new QLabel("Description: " + queries[i].value(7).toString());
-            QLabel *srcLabel = new QLabel("Source: " + queries[i].value(2).toString());
-            QLabel *picLabel = new QLabel("Picture: " + queries[i].value(5).toString());
-            QLabel *datLabel = new QLabel("Date: " + queries[i].value(6).toString());
-            newGrid->addWidget(destLabel);
-            newGrid->addWidget(srcLabel);
-            newGrid->addWidget(picLabel);
-            newGrid->addWidget(datLabel);
-            newWidget->setLayout(newGrid);
-
-         //   newWidget->setData(0, queries[i].value(1).toString());
-
-            ui->newsListWidget->addItem(item);
-            ui->newsListWidget->setItemWidget(item,newWidget);
-        }
+        QMessageBox::warning(this,tr("NewsGui"),tr("Begin date must be prior to end date! Please change and hit update again."), QMessageBox::Ok);
+        return;
     }
+    qDebug() << "Limiting dates: " << limitDate;
+    queryBuilder.clearQuery();
+    ui->newsListWidget->clear();
+    //get sources list
+    QStringList sourceList = activeSources;
+    //get categories list
+    QStringList categoryList = activeCategories;
+    QStringList filter = parseList(ui->filterLineEdit->text());
+    //query the data base for the list of news
+    queryBuilder.initQuery(categoryList);
+    //update the news list with the new news
+    queryBuilder.sort(false);
+    queryBuilder.addFilterWords(filter);
+    queryBuilder.addSources(sourceList);
+    if(limitDate)
+        queryBuilder.filterDate(begin,end);
+    queryBuilder.finalizeQuery();
+    QSqlQuery query = queryBuilder.execQuery();
+
+    while(query.next())
+    {
+
+        QListWidgetItem *item = new QListWidgetItem();
+
+        item->setSizeHint(QSize(0,100));
+
+        QWidget *newWidget = new QWidget();
+        QLayout *newGrid = new QGridLayout();
+
+        QLabel *titleLabel = new QLabel("Title: " + query.value(TITLE).toString());
+        QLabel *destLabel = new QLabel("Description: " + query.value(DESCRIPTION).toString());
+        QLabel *srcLabel = new QLabel("Source: " + query.value(SOURCE).toString());
+        //QLabel *picLabel = new QLabel("Picture: " + query.value(IMAGE).toString());
+        QLabel *datLabel = new QLabel("Date: " + query.value(DATE).toString());
+        QLabel *catLabel = new QLabel("Category: " + query.value(CATEGORY).toString());
+
+        newGrid->addWidget(titleLabel);
+        newGrid->addWidget(destLabel);
+        newGrid->addWidget(srcLabel);
+        //newGrid->addWidget(picLabel);
+        newGrid->addWidget(datLabel);
+        newGrid->addWidget(catLabel);
+        newWidget->setLayout(newGrid);
+        ui->newsListWidget->addItem(item);
+        ui->newsListWidget->setItemWidget(item,newWidget);
+        item->setData(3, query.value(URL).toString());
+
+    }
+    settingsWindow.close();
+
 }
 
+//takes a Qstring with the given format "word1,word2,word3"
+//then splits it based on commas and returns the result as a QstringList which is
+//essentially a string array
 QStringList parseList(QString list)
 {
-
     return list.split(",");
-
 }
 
+//makes a connection to the database with the specified username and password passed
+//as parameters to this function, the QSqlDatabase object is then returned
+QSqlDatabase startDb(QString user, QString pass)
+{
+    //creates SQLConn object pointer
+    SQLConn::Instance();
+    //makes connection to db with the username and pass specified by parameters
+    SQLConn::Instance()->makeConnection(user,pass);
+    //returns the QSqlDatabase object that was created by the SqlConn object
+    return SQLConn::Instance()->getDatabase();
+}
+
+//checks to make sure the database passed as a parameter is open
+//displays positive message if open, negative message with
+//error is displayed otherwise
+void errorCheck(QSqlDatabase db)
+{
+    if(db.isOpen())
+        qDebug() << "Created db connection";
+    else
+    {
+        qDebug() << "Failed to connect to database";
+        qDebug() << "Databse error: " << db.lastError();
+    }
+}
+
+//opens the news article that was clicked in the default browser.
 void MainWindow::on_newsListWidget_itemClicked(QListWidgetItem *item)
 {
-
-    QString link;
-    qDebug() << item->text() << " clicked";
-    bool _continue = true;
-    std::vector<QSqlQuery> queries = queryBuilder.getFinalQueries();
-
-    for(int i = 0; i < queries.size();i++)
-    {
-        queries[i].seek(-1);
-        while(queries[i].next())
-        {
-            if(queries[i].value(1) == item->text())
-            {
-                link = queries[i].value(4).toString();
-                _continue = false;
-                break;
-
-            }
-            if(!_continue)
-                continue;
-        }
-    }
-
-      QDesktopServices::openUrl(QUrl(link));
-
+    QString link = item->data(3).toString();
+    QDesktopServices::openUrl(QUrl(link));
 }
 
 void MainWindow::on_actionSettings_triggered()
 {
     settingsWindow.exec();
 }
+
+void MainWindow::on_categoryListWidget_itemChanged(QListWidgetItem *item)
+{
+    if(item->checkState() == Qt::Checked && !activeCategories.contains(item->text()))
+            activeCategories.append(item->text());
+        else if(item->checkState() == Qt::Unchecked)
+            activeCategories.removeAt(activeCategories.indexOf(item->text()));
+}
+
+void MainWindow::on_sourcesListWidget_itemChanged(QListWidgetItem *item)
+{
+    if(item->checkState() == Qt::Checked && !activeSources.contains(item->text()))
+            activeSources.append(item->text());
+        else if(item->checkState() == Qt::Unchecked)
+            activeSources.removeAt(activeSources.indexOf(item->text()));
+}
+
+void MainWindow::on_filterLineEdit_returnPressed()
+{
+    QString filterText = ui->filterLineEdit->text();
+    filterList = parseList(filterText);
+    on_updateSettingsButton_clicked();
+}
+
+void MainWindow::on_sourcesLineEdit_textEdited(const QString &arg1)
+{
+    QRegExp searchTerm(".*" + arg1 + ".*");
+    QList<QListWidgetItem *> widgets = ui->sourcesListWidget->findItems(searchTerm.pattern(), Qt::MatchRegExp);
+    if(widgets.size() > 0)
+    {
+        ui->sourcesListWidget->setCurrentItem(widgets[0]);
+        ui->sourcesListWidget->scrollToItem(widgets[0],QAbstractItemView::PositionAtTop);
+    }
+    else
+    {
+        qDebug() << "couldn't find " << arg1;
+        ui->sourcesListWidget->setCurrentRow(0);
+    }
+}
+
+void MainWindow::on_dateCheckBox_stateChanged(int arg1)
+{
+    if(ui->dateCheckBox->checkState() == Qt::Checked)
+        limitDate = true;
+    else
+        limitDate = false;
+
+}
+

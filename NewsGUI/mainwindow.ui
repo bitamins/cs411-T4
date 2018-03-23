@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>428</width>
-    <height>431</height>
+    <width>681</width>
+    <height>760</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -58,8 +58,11 @@
           <string>Sources</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
-          <item row="0" column="0">
+          <item row="1" column="0">
            <widget class="QLineEdit" name="sourcesLineEdit"/>
+          </item>
+          <item row="0" column="0">
+           <widget class="QListWidget" name="sourcesListWidget"/>
           </item>
          </layout>
         </widget>
@@ -71,7 +74,7 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_3" columnstretch="0">
           <item row="1" column="0">
-           <widget class="QLineEdit" name="categoriesLineEdit"/>
+           <widget class="QListWidget" name="categoryListWidget"/>
           </item>
          </layout>
         </widget>
@@ -89,11 +92,18 @@
           <string>Dates - mm/dd/yyyy</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_5">
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="dateToLineEdit"/>
+          <item row="1" column="1">
+           <widget class="QDateEdit" name="toDateEdit"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QDateEdit" name="fromDateEdit"/>
           </item>
           <item row="0" column="0">
-           <widget class="QLineEdit" name="dateFromLineEdit"/>
+           <widget class="QCheckBox" name="dateCheckBox">
+            <property name="text">
+             <string>Limit Dates</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -108,8 +118,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>428</width>
-     <height>22</height>
+     <width>681</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
