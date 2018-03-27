@@ -21,39 +21,21 @@ MainWindow::MainWindow(QString username, QString pass, QWidget *parent) :
     ui->setupUi(this);
     limitDate = false;
     //create Settings separate window
-    //QWidget* settingsWindow = new QWidget();
     QLayout* settingsGrid = new QGridLayout();
     settingsWindow.setWindowFlags(Qt::Window);
     settingsWindow.setLayout(settingsGrid);
 
     database = startDb(username,pass);
 
-
-    //Retrieve categories settings and settings
-    activeSources = settings.value("SourcesList").value<QStringList>();
-    activeCategories = settings.value("CategoriesList").value<QStringList>();
-    filterList = settings.value("FilterList").value<QStringList>();
-    limitDate = settings.value("LimitDate").value<bool>();
-    if(limitDate)
-    {
-        ui->dateCheckBox->setChecked(true);
-        begin = settings.value("BeginDate").value<QDate>();
-        end = settings.value("EndDate").value<QDate>();
-        ui->fromDateEdit->setDate(begin);
-        ui->toDateEdit->setDate(end);
-    }
-    //ui->categoriesLineEdit->setText(settings.value("CategoriesFilterText", "").toString());
-    //ui->sourcesLineEdit->setText(settings.value("SourcesFilterText", "").toString());
-
     driver();
 
     settingsGrid->addWidget(ui->settingsGroupBox);
 }
-
+//saves settings upon the closing of the window. Only saves the date range if
+//the date checkbox was checked upon closing
 MainWindow::~MainWindow()
 {
-    //settings.setValue("CategoriesFilterText", ui->categoriesLineEdit->text());
-    //settings.setValue("SourcesFilterText", ui->sourcesLineEdit->text());
+
     settings.setValue("SourcesList", QVariant::fromValue(activeSources));
     settings.setValue("CategoriesList", QVariant::fromValue(activeCategories));
     settings.setValue("FilterList", QVariant::fromValue(filterList));
@@ -65,6 +47,8 @@ MainWindow::~MainWindow()
     }
     delete ui;
 }
+
+//calls the majority of the helper functions, used simply to reduce the body of the constructor
 void MainWindow::driver()
 {
     errorCheck(database);
@@ -73,6 +57,8 @@ void MainWindow::driver()
     setupSources();
     restoreSettings();
 }
+
+//adds category checkboxes to settings ui, puts them in unchecked state
 void MainWindow::setupCategories()
 {
     QStringList categories = {"Sports", "Entertainment", "Technology", "Business", "Health", "Science"};
@@ -114,10 +100,26 @@ void MainWindow::on_clearSettingsButton_clicked()
     ui->sourcesLineEdit->clear();
     ui->newsListWidget->clear();
     queryBuilder.clearQuery();
+
 }
 
 void MainWindow::restoreSettings()
 {
+    activeSources = settings.value("SourcesList").value<QStringList>();
+    activeCategories = settings.value("CategoriesList").value<QStringList>();
+    filterList = settings.value("FilterList").value<QStringList>();
+
+    limitDate = settings.value("LimitDate").value<bool>();
+
+    //only load date from settings if limitDate was checked on last program run
+    if(limitDate)
+    {
+        ui->dateCheckBox->setChecked(true);
+        begin = settings.value("BeginDate").value<QDate>();
+        end = settings.value("EndDate").value<QDate>();
+        ui->fromDateEdit->setDate(begin);
+        ui->toDateEdit->setDate(end);
+    }
     if(ui->sourcesListWidget->count() > 0)
     {
         foreach(QString source, activeSources)
@@ -137,19 +139,9 @@ void MainWindow::restoreSettings()
     }
     on_updateSettingsButton_clicked();
 }
-void MainWindow::on_updateSettingsButton_clicked()
+void MainWindow::updateQuery()
 {
-    begin = ui->fromDateEdit->date();
-    end = ui->toDateEdit->date();
-    qDebug() << "begin: " <<  begin.toString() << " end: " << end.toString();
-    if(begin > end)
-    {
-        QMessageBox::warning(this,tr("NewsGui"),tr("Begin date must be prior to end date! Please change and hit update again."), QMessageBox::Ok);
-        return;
-    }
-    qDebug() << "Limiting dates: " << limitDate;
     queryBuilder.clearQuery();
-    ui->newsListWidget->clear();
     //get sources list
     QStringList sourceList = activeSources;
     //get categories list
@@ -164,37 +156,22 @@ void MainWindow::on_updateSettingsButton_clicked()
     if(limitDate)
         queryBuilder.filterDate(begin,end);
     queryBuilder.finalizeQuery();
-    QSqlQuery query = queryBuilder.execQuery();
-
-    while(query.next())
+    queryBuilder.execQuery();
+}
+void MainWindow::on_updateSettingsButton_clicked()
+{
+    begin = ui->fromDateEdit->date();
+    end = ui->toDateEdit->date();
+    if(begin > end)
     {
-
-        QListWidgetItem *item = new QListWidgetItem();
-
-        item->setSizeHint(QSize(0,100));
-
-        QWidget *newWidget = new QWidget();
-        QLayout *newGrid = new QGridLayout();
-
-        QLabel *titleLabel = new QLabel("Title: " + query.value(TITLE).toString());
-        QLabel *destLabel = new QLabel("Description: " + query.value(DESCRIPTION).toString());
-        QLabel *srcLabel = new QLabel("Source: " + query.value(SOURCE).toString());
-        //QLabel *picLabel = new QLabel("Picture: " + query.value(IMAGE).toString());
-        QLabel *datLabel = new QLabel("Date: " + query.value(DATE).toString());
-        QLabel *catLabel = new QLabel("Category: " + query.value(CATEGORY).toString());
-
-        newGrid->addWidget(titleLabel);
-        newGrid->addWidget(destLabel);
-        newGrid->addWidget(srcLabel);
-        //newGrid->addWidget(picLabel);
-        newGrid->addWidget(datLabel);
-        newGrid->addWidget(catLabel);
-        newWidget->setLayout(newGrid);
-        ui->newsListWidget->addItem(item);
-        ui->newsListWidget->setItemWidget(item,newWidget);
-        item->setData(3, query.value(URL).toString());
-
+        QMessageBox::warning(this,tr("NewsGui"),tr("Begin date must be prior to end date! Please change and hit update again."), QMessageBox::Ok);
+        return;
     }
+
+    ui->newsListWidget->clear();
+    updateQuery();
+    QSqlQuery query = queryBuilder.getFinalQuery();
+
     settingsWindow.close();
 
 }
@@ -245,6 +222,8 @@ void MainWindow::on_actionSettings_triggered()
     settingsWindow.exec();
 }
 
+//if a category is checked, add it to the active categories list if a category is unchecked remove
+//it from active categories list.
 void MainWindow::on_categoryListWidget_itemChanged(QListWidgetItem *item)
 {
     if(item->checkState() == Qt::Checked && !activeCategories.contains(item->text()))
@@ -253,6 +232,8 @@ void MainWindow::on_categoryListWidget_itemChanged(QListWidgetItem *item)
             activeCategories.removeAt(activeCategories.indexOf(item->text()));
 }
 
+//if a source is checked, add it to the active sources list if a source is unchecked remove
+//it from active sources list.
 void MainWindow::on_sourcesListWidget_itemChanged(QListWidgetItem *item)
 {
     if(item->checkState() == Qt::Checked && !activeSources.contains(item->text()))
@@ -261,6 +242,9 @@ void MainWindow::on_sourcesListWidget_itemChanged(QListWidgetItem *item)
             activeSources.removeAt(activeSources.indexOf(item->text()));
 }
 
+//when return is pressed on the filter line button then the string that was in the filter line and
+//parses it into a string list based on commas. so if bitcoin,economy,stocks is in the line edit when
+//return is pressed the the string list would be {bitcoin, economy, stocks}
 void MainWindow::on_filterLineEdit_returnPressed()
 {
     QString filterText = ui->filterLineEdit->text();
@@ -268,15 +252,21 @@ void MainWindow::on_filterLineEdit_returnPressed()
     on_updateSettingsButton_clicked();
 }
 
+//function is used to search source list, checks to see if a source has a partial match
+//with the string passed as a parameter. If theres atleast one match then it is selected
+//otherwise jump back to the top of the sources list.
 void MainWindow::on_sourcesLineEdit_textEdited(const QString &arg1)
 {
-    QRegExp searchTerm(".*" + arg1 + ".*");
+    QRegExp searchTerm(".*" + arg1 + ".*");//regex for partial string match
+    //create a vector of widget pointers to the sources that satisfy the regex
     QList<QListWidgetItem *> widgets = ui->sourcesListWidget->findItems(searchTerm.pattern(), Qt::MatchRegExp);
+    //as long as theres atleast one match set the first match as the selected item and put it at the top of the scrollbox
     if(widgets.size() > 0)
     {
         ui->sourcesListWidget->setCurrentItem(widgets[0]);
         ui->sourcesListWidget->scrollToItem(widgets[0],QAbstractItemView::PositionAtTop);
     }
+    //otherwise display an error and jump to the top of the list
     else
     {
         qDebug() << "couldn't find " << arg1;
@@ -284,6 +274,9 @@ void MainWindow::on_sourcesLineEdit_textEdited(const QString &arg1)
     }
 }
 
+//function just handles whether the date should be incorporated in the query
+// if it changes state and is in the on state then the date will be included in the query
+//otherwise it wont be.
 void MainWindow::on_dateCheckBox_stateChanged(int arg1)
 {
     if(ui->dateCheckBox->checkState() == Qt::Checked)
@@ -293,3 +286,25 @@ void MainWindow::on_dateCheckBox_stateChanged(int arg1)
 
 }
 
+void MainWindow::on_rppComboBox_currentIndexChanged(int index)
+{
+    switch(index)
+    {
+        case 0:
+            pageCount = 10;
+            break;
+        case 1:
+            pageCount = 25;
+            break;
+        case 2:
+            pageCount = 50;
+            break;
+        case 3:
+            pageCount = 100;
+            break;
+        default:
+            qDebug() << "Qt broke.";
+            break;
+
+    }
+}

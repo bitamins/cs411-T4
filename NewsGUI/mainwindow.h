@@ -31,6 +31,7 @@ public:
     void setupSources();
     void driver();
     void restoreSettings();
+    void updateQuery();
     ~MainWindow();
 
 private slots:
@@ -52,6 +53,8 @@ private slots:
 
     void on_dateCheckBox_stateChanged(int arg1);
 
+    void on_rppComboBox_currentIndexChanged(int index);
+
 private:
     Ui::MainWindow *ui;
     QDialog settingsWindow;
@@ -65,6 +68,7 @@ private:
     QSettings settings;
     QDate begin;
     QDate end;
+    int pageCount;
 
 };
 

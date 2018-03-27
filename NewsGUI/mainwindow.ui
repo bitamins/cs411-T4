@@ -21,10 +21,10 @@
        <string>News</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_6">
-       <item row="1" column="0">
+       <item row="4" column="0">
         <widget class="QListWidget" name="newsListWidget"/>
        </item>
-       <item row="0" column="0">
+       <item row="1" column="0">
         <widget class="QGroupBox" name="filterGroupBox">
          <property name="title">
           <string>Filter</string>
@@ -34,6 +34,85 @@
            <widget class="QLineEdit" name="filterLineEdit"/>
           </item>
          </layout>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QGroupBox" name="groupBox">
+         <property name="minimumSize">
+          <size>
+           <width>643</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="title">
+          <string>Page</string>
+         </property>
+         <widget class="QComboBox" name="rppComboBox">
+          <property name="geometry">
+           <rect>
+            <x>110</x>
+            <y>20</y>
+            <width>121</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <item>
+           <property name="text">
+            <string>10</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>25</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>50</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>100</string>
+           </property>
+          </item>
+         </widget>
+         <widget class="QLabel" name="resultPP">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>20</y>
+            <width>101</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Results per page:</string>
+          </property>
+         </widget>
+         <widget class="QSpinBox" name="pageSelector">
+          <property name="geometry">
+           <rect>
+            <x>300</x>
+            <y>20</y>
+            <width>81</width>
+            <height>16</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QLabel" name="pageLabel">
+          <property name="geometry">
+           <rect>
+            <x>250</x>
+            <y>20</y>
+            <width>47</width>
+            <height>13</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Page</string>
+          </property>
+         </widget>
         </widget>
        </item>
       </layout>
