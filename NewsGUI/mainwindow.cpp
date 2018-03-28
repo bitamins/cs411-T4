@@ -180,7 +180,8 @@ void MainWindow::on_updateSettingsButton_clicked()
         QLabel *destLabel = new QLabel("Description: " + query.value(DESCRIPTION).toString());
         QLabel *srcLabel = new QLabel("Source: " + query.value(SOURCE).toString());
         //QLabel *picLabel = new QLabel("Picture: " + query.value(IMAGE).toString());
-        QLabel *datLabel = new QLabel("Date: " + query.value(DATE).toString());
+        QString dateFormat = "MMMM dd, yyyy";
+        QLabel *datLabel = new QLabel("Date: " + query.value(DATE).toDateTime().toString(dateFormat));
         QLabel *catLabel = new QLabel("Category: " + query.value(CATEGORY).toString());
 
         newGrid->addWidget(titleLabel);
