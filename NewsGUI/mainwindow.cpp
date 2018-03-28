@@ -183,6 +183,7 @@ void MainWindow::on_updateSettingsButton_clicked()
         QLabel *datLabel = new QLabel("Date: " + query.value(DATE).toDateTime().toString(dateFormat));
         QLabel *catLabel = new QLabel("Category: " + query.value(CATEGORY).toString());
 
+        newGrid->setSpacing(0);
         newGrid->addWidget(titleLabel);
         newGrid->addWidget(destLabel);
         newGrid->addWidget(srcLabel);
