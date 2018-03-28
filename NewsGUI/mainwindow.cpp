@@ -180,7 +180,7 @@ void MainWindow::on_updateSettingsButton_clicked()
         QLabel *destLabel = new QLabel("Description: " + query.value(DESCRIPTION).toString());
         QLabel *srcLabel = new QLabel("Source: " + query.value(SOURCE).toString());
         //QLabel *picLabel = new QLabel("Picture: " + query.value(IMAGE).toString());
-        QString dateFormat = "dddd, MMMM dd, yyyy"; //day of week, month, day num, year
+        QString dateFormat = "dddd, MMMM d, yyyy"; //day of week, month, day num, year
         QLabel *datLabel = new QLabel("Date: " + query.value(DATE).toDateTime().toString(dateFormat));
         QLabel *catLabel = new QLabel("Category: " + query.value(CATEGORY).toString());
 
