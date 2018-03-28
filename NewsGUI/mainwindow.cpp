@@ -27,8 +27,6 @@ MainWindow::MainWindow(QString username, QString pass, QWidget *parent) :
     settingsWindow.setLayout(settingsGrid);
 
     database = startDb(username,pass);
-
-
     //Retrieve categories settings and settings
     activeSources = settings.value("SourcesList").value<QStringList>();
     activeCategories = settings.value("CategoriesList").value<QStringList>();
@@ -170,14 +168,14 @@ void MainWindow::on_updateSettingsButton_clicked()
     {
 
         QListWidgetItem *item = new QListWidgetItem();
-
-        item->setSizeHint(QSize(0,100));
+        item->setSizeHint(QSize(0,145));
 
         QWidget *newWidget = new QWidget();
         QLayout *newGrid = new QGridLayout();
 
         QLabel *titleLabel = new QLabel("Title: " + query.value(TITLE).toString());
         QLabel *destLabel = new QLabel("Description: " + query.value(DESCRIPTION).toString());
+        destLabel->setWordWrap(true);
         QLabel *srcLabel = new QLabel("Source: " + query.value(SOURCE).toString());
         //QLabel *picLabel = new QLabel("Picture: " + query.value(IMAGE).toString());
         QLabel *datLabel = new QLabel("Date: " + query.value(DATE).toDateTime().toString(dateFormat));
