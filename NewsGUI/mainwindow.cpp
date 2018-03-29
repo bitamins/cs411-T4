@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include "pagelist.hpp"
 QStringList parseList(QString);
 QSqlDatabase startDb(QString, QString);
 void errorCheck(QSqlDatabase);
@@ -19,6 +19,7 @@ MainWindow::MainWindow(QString username, QString pass, QWidget *parent) :
     settings("RealNews", "NewsFetcher")
 {
     ui->setupUi(this);
+    pageSize = 10;
     limitDate = false;
     //create Settings separate window
     QLayout* settingsGrid = new QGridLayout();
@@ -40,6 +41,7 @@ MainWindow::~MainWindow()
     settings.setValue("CategoriesList", QVariant::fromValue(activeCategories));
     settings.setValue("FilterList", QVariant::fromValue(filterList));
     settings.setValue("LimitDate", QVariant::fromValue(limitDate));
+    settings.setValue("pageSize", QVariant::fromValue(pageSize));
     if(limitDate)
     {
         settings.setValue("BeginDate", QVariant::fromValue(begin));
@@ -107,6 +109,9 @@ void MainWindow::restoreSettings()
 {
     activeSources = settings.value("SourcesList").value<QStringList>();
     activeCategories = settings.value("CategoriesList").value<QStringList>();
+    pageSize = settings.value("pageSize").value<int>();
+    if(pageSize == 0)//if no setting exists then just set to 25 by default
+        pageSize = 10;
     filterList = settings.value("FilterList").value<QStringList>();
 
     limitDate = settings.value("LimitDate").value<bool>();
@@ -139,6 +144,7 @@ void MainWindow::restoreSettings()
     }
     on_updateSettingsButton_clicked();
 }
+
 void MainWindow::updateQuery()
 {
     queryBuilder.clearQuery();
@@ -158,6 +164,7 @@ void MainWindow::updateQuery()
     queryBuilder.finalizeQuery();
     queryBuilder.execQuery();
 }
+
 void MainWindow::on_updateSettingsButton_clicked()
 {
     begin = ui->fromDateEdit->date();
@@ -170,8 +177,14 @@ void MainWindow::on_updateSettingsButton_clicked()
 
     ui->newsListWidget->clear();
     updateQuery();
-    QSqlQuery query = queryBuilder.getFinalQuery();
 
+    QSqlQuery query = queryBuilder.getFinalQuery();
+    pages.setPages(query, pageSize);
+    QListWidget* temp = pages.loadPage(1);
+    if(temp!=NULL)
+        ui->newsListWidget = pages.loadPage(0);
+    else
+        QMessageBox::warning(this,tr("NewsGui"),tr("Invalid page"), QMessageBox::Ok);
     settingsWindow.close();
 
 }
@@ -291,16 +304,16 @@ void MainWindow::on_rppComboBox_currentIndexChanged(int index)
     switch(index)
     {
         case 0:
-            pageCount = 10;
+            pageSize = 10;
             break;
         case 1:
-            pageCount = 25;
+            pageSize = 25;
             break;
         case 2:
-            pageCount = 50;
+            pageSize = 50;
             break;
         case 3:
-            pageCount = 100;
+            pageSize = 100;
             break;
         default:
             qDebug() << "Qt broke.";

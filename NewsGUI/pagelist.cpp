@@ -1,8 +1,23 @@
-#include "pagelist.h"
+#include "pagelist.hpp"
+
+pageList::pageList()
+{
+   //qDebug() << "Creating pageList object";
+}
+
+QListWidget* pageList::loadPage(int pageNumber)
+{
+    if(pageNumber >= 0 && pageNumber < pageCount)
+        return listOfPages.at(pageNumber);
+    else
+        return NULL;
+
+}
+
 void pageList::setPages(QSqlQuery query, int pageSize)
 {
     //set the page count to the rounded up number of the amount of results divided by page size
-    int pageCount = ceil(query.size()/pageSize);
+    pageCount = ceil(query.size()/pageSize);
     int j = 0;
     for(int i = 0; i < pageCount; i++)
     {
@@ -39,7 +54,4 @@ void pageList::setPages(QSqlQuery query, int pageSize)
     }
 }
 
-pageList::pageList()
-{
-   //qDebug() << "Creating pageList object";
-}
+

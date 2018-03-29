@@ -30,15 +30,13 @@ SOURCES += \
         mainwindow.cpp \
         querybuilder.cpp \
         sqlconn.cpp \
-    page.cpp \
-    pagelist.cpp
+        pagelist.cpp
 
 HEADERS += \
         mainwindow.h \
         querybuilder.h \
         sqlconn.hpp \
-    page.h \
-    pagelist.h
+        pagelist.hpp
 
 FORMS += \
         mainwindow.ui

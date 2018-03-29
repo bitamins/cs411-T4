@@ -13,6 +13,7 @@ class pageList
         void setPages(QSqlQuery, int);
     private:
         QList<QListWidget*> listOfPages;
+        int pageCount;
 
 };
 

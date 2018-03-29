@@ -6,6 +6,7 @@
 #include <QSqlDatabase>
 #include "querybuilder.h"
 #include "sqlconn.hpp"
+#include "pagelist.hpp"
 #include <QDesktopServices>
 #include <QListWidget>
 #include <QUrl>
@@ -68,7 +69,8 @@ private:
     QSettings settings;
     QDate begin;
     QDate end;
-    int pageCount;
+    int pageSize;
+    pageList pages;
 
 };
 
