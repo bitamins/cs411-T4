@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QSqlDatabase>
 #include "querybuilder.h"
+#include "customdownloadmanager.h"
 #include "sqlconn.hpp"
 #include <QDesktopServices>
 #include <QListWidget>
@@ -15,6 +16,7 @@
 #include <QSettings>
 #include <QDateTime>
 #include <QMessageBox>
+#include <QNetworkAccessManager>
 
 namespace Ui {
 class MainWindow;
@@ -51,7 +53,11 @@ private slots:
     void on_sourcesLineEdit_textEdited(const QString &arg1);
 
     void on_dateCheckBox_stateChanged(int arg1);
+/*
+    void getImageFromUrl(QString url);
 
+    QPixmap downloadFinished(QNetworkReply *reply);
+*/
 private:
     Ui::MainWindow *ui;
     QDialog settingsWindow;
@@ -65,6 +71,8 @@ private:
     QSettings settings;
     QDate begin;
     QDate end;
+    CustomDownloadManager CDM;
+    bool test;
 
 };
 
