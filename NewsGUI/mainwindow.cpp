@@ -46,6 +46,7 @@ MainWindow::MainWindow(QString username, QString pass, QWidget *parent) :
     driver();
 
     settingsGrid->addWidget(ui->settingsGroupBox);
+    bool test=false;
 }
 
 MainWindow::~MainWindow()
@@ -170,24 +171,33 @@ void MainWindow::on_updateSettingsButton_clicked()
         QListWidgetItem *item = new QListWidgetItem();
         item->setSizeHint(QSize(0,145));
 
+        //create custom widget item and layout
         QWidget *newWidget = new QWidget();
         QLayout *newGrid = new QGridLayout();
 
+        //create item labels
         QLabel *titleLabel = new QLabel("Title: " + query.value(TITLE).toString());
         QLabel *destLabel = new QLabel("Description: " + query.value(DESCRIPTION).toString());
         destLabel->setWordWrap(true);
         QLabel *srcLabel = new QLabel("Source: " + query.value(SOURCE).toString());
         //QLabel *picLabel = new QLabel("Picture: " + query.value(IMAGE).toString());
         QLabel *datLabel = new QLabel("Date: " + query.value(DATE).toDateTime().toString(dateFormat));
+        QLabel *picLabel = new QLabel();
+        if(!test){
+            picLabel->setPixmap(CDM.downloadImage(QUrl(query.value(IMAGE).toString())));
+            test = true;
+        }
         QLabel *catLabel = new QLabel("Category: " + query.value(CATEGORY).toString());
+        QLabel *blankLabel = new QLabel("thing");
 
         newGrid->setSpacing(0);
         newGrid->addWidget(titleLabel);
         newGrid->addWidget(destLabel);
         newGrid->addWidget(srcLabel);
-        //newGrid->addWidget(picLabel);
+        newGrid->addWidget(picLabel);
         newGrid->addWidget(datLabel);
         newGrid->addWidget(catLabel);
+        //newGrid->addWidget(blankLabel,0,0)
         newWidget->setLayout(newGrid);
         ui->newsListWidget->addItem(item);
         ui->newsListWidget->setItemWidget(item,newWidget);
@@ -198,6 +208,28 @@ void MainWindow::on_updateSettingsButton_clicked()
 
 }
 
+/*
+//retrieves an image from a url for newslist items
+void getImageFromUrl(QString newsUrl)
+{
+   //create network interface object
+   //connect a slot for finished download flags
+   QNetworkAccessManager *nam = new QNetworkAccessManager();
+   QObject::connect(nam, &QNetworkAccessManager::finished, &MainWindow::downloadFinished);
+
+   //create network request then send it
+   const QUrl url = QUrl(newsUrl);
+   nam->get(request);
+}
+
+QPixmap downloadFinished(QNetworkReply *reply)
+{
+    QPixmap pm;
+    pm.loadFromData(reply.readAll());
+    delete reply;
+    return pm;
+}
+*/
 //takes a Qstring with the given format "word1,word2,word3"
 //then splits it based on commas and returns the result as a QstringList which is
 //essentially a string array

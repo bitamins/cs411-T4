@@ -6,6 +6,7 @@
 
 QT       += core gui
 QT       += sql
+QT       += network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -29,12 +30,14 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
         querybuilder.cpp \
-        sqlconn.cpp
+        sqlconn.cpp \
+    customdownloadmanager.cpp
 
 HEADERS += \
         mainwindow.h \
         querybuilder.h \
-        sqlconn.hpp
+        sqlconn.hpp \
+    customdownloadmanager.h
 
 FORMS += \
         mainwindow.ui
