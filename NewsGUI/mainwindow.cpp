@@ -113,6 +113,16 @@ void MainWindow::on_clearSettingsButton_clicked()
     ui->sourcesLineEdit->clear();
     ui->newsListWidget->clear();
     queryBuilder.clearQuery();
+    foreach(QString category , activeCategories)
+    {
+        QListWidgetItem* widget = ui->categoryListWidget->findItems(category, Qt::MatchExactly)[0];
+        widget->setCheckState(Qt::Unchecked);
+    }
+    foreach(QString category, activeSources)
+    {
+        QListWidgetItem* widgetSource = ui->sourcesListWidget->findItems(category,Qt::MatchExactly)[0];
+        widgetSource->setCheckState(Qt::Unchecked);
+    }
 }
 
 void MainWindow::restoreSettings()
