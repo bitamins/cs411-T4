@@ -4,7 +4,7 @@
 CustomDownloadManager::CustomDownloadManager()
 {
     connect(&manager, SIGNAL(finished(QNetworkReply*)),
-            SLOT(imageDLcomplete(QNetworkReply*)));
+            SLOT(downloadFinished(QNetworkReply*)));
     imageReady = false;
 }
 
@@ -28,6 +28,7 @@ void CustomDownloadManager::startDownload(const QUrl &url)
     currentDownloads.append(reply);
 }
 
+//do not use this function
 QPixmap CustomDownloadManager::downloadImage(const QUrl &url)
 {
     QNetworkRequest request(url);
@@ -51,6 +52,7 @@ QPixmap CustomDownloadManager::downloadImage(const QUrl &url)
 QString CustomDownloadManager::saveFileName(const QUrl &url)
 {
     QString path = url.path();
+    qDebug() << url.path();
     QString basename = QFileInfo(path).fileName();
 
     if(basename.isEmpty()){
@@ -70,7 +72,9 @@ QString CustomDownloadManager::saveFileName(const QUrl &url)
 
 bool CustomDownloadManager::saveFileToDisk(const QString &filename, QIODevice *data)
 {
-    QFile file(filename);
+    QString folderstring = "newsImages/";
+    folderstring.append(filename);
+    QFile file(folderstring);
     if(!file.open(QIODevice::WriteOnly)){
         fprintf(stderr, "could not open %s for writing: %s\n",
                 qPrintable(filename),
@@ -124,6 +128,7 @@ void CustomDownloadManager::sslErrors(const QList<QSslError> &sslErrors){
 }
 
 void CustomDownloadManager::downloadFinished(QNetworkReply *reply){
+    qDebug() << "download finished " << endl;
     QUrl url = reply->url();
     if(reply->error()){
         fprintf(stderr, "Download of %s failed: %s\n",

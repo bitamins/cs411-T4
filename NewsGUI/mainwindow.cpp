@@ -136,6 +136,16 @@ void MainWindow::restoreSettings()
     }
     on_updateSettingsButton_clicked();
 }
+
+void MainWindow::downloadNewsImage(QString url){
+    CDM.startDownload(QUrl(url));
+    qDebug() << "downloading " << url << endl;
+}
+
+void MainWindow::setNewsImages(){
+
+}
+
 void MainWindow::on_updateSettingsButton_clicked()
 {
     begin = ui->fromDateEdit->date();
@@ -183,12 +193,17 @@ void MainWindow::on_updateSettingsButton_clicked()
         //QLabel *picLabel = new QLabel("Picture: " + query.value(IMAGE).toString());
         QLabel *datLabel = new QLabel("Date: " + query.value(DATE).toDateTime().toString(dateFormat));
         QLabel *picLabel = new QLabel();
+
+       /*
         if(!test){
             picLabel->setPixmap(CDM.downloadImage(QUrl(query.value(IMAGE).toString())));
             test = true;
         }
+         */
+        downloadNewsImage(query.value(IMAGE).toString());//start the news image downloads
+
         QLabel *catLabel = new QLabel("Category: " + query.value(CATEGORY).toString());
-        QLabel *blankLabel = new QLabel("thing");
+       // QLabel *blankLabel = new QLabel("thing");
 
         newGrid->setSpacing(0);
         newGrid->addWidget(titleLabel);

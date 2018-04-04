@@ -53,6 +53,10 @@ private slots:
     void on_sourcesLineEdit_textEdited(const QString &arg1);
 
     void on_dateCheckBox_stateChanged(int arg1);
+
+    void downloadNewsImage(QString);
+
+    void setNewsImages();
 /*
     void getImageFromUrl(QString url);
 
