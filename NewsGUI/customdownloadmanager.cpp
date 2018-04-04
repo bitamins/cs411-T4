@@ -10,6 +10,7 @@ CustomDownloadManager::CustomDownloadManager()
 
 bool CustomDownloadManager::imageDLcomplete(QNetworkReply *reply){
     imageReady = true;
+    return imageReady;
 }
 
 //download an image
@@ -72,9 +73,9 @@ QString CustomDownloadManager::saveFileName(const QUrl &url)
 
 bool CustomDownloadManager::saveFileToDisk(const QString &filename, QIODevice *data)
 {
-    QString folderstring = "newsImages/";
-    folderstring.append(filename);
-    QFile file(folderstring);
+    //QString folderstring = "newsImages/";
+    //folderstring.append(filename);
+    QFile file(filename);
     if(!file.open(QIODevice::WriteOnly)){
         fprintf(stderr, "could not open %s for writing: %s\n",
                 qPrintable(filename),

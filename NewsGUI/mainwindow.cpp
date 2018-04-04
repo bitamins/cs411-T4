@@ -110,9 +110,13 @@ void MainWindow::on_clearSettingsButton_clicked()
 {
     //clear sources list
     //clear categories list
+    QDate resetDate = QDate::fromString("01/01/2000", "dd/MM/yyyy");
     ui->sourcesLineEdit->clear();
     ui->newsListWidget->clear();
     queryBuilder.clearQuery();
+    ui->dateCheckBox->setCheckState(Qt::Unchecked);
+    ui->toDateEdit->setDate(resetDate);
+    ui->fromDateEdit->setDate(resetDate);
     foreach(QString category , activeCategories)
     {
         QListWidgetItem* widget = ui->categoryListWidget->findItems(category, Qt::MatchExactly)[0];
