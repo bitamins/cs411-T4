@@ -117,6 +117,11 @@ void MainWindow::on_clearSettingsButton_clicked()
     ui->dateCheckBox->setCheckState(Qt::Unchecked);
     ui->toDateEdit->setDate(resetDate);
     ui->fromDateEdit->setDate(resetDate);
+    activeCategories.clear();
+    activeSources.clear();
+    filterList.clear();
+    begin = resetDate;
+    end = resetDate;
     foreach(QString category , activeCategories)
     {
         QListWidgetItem* widget = ui->categoryListWidget->findItems(category, Qt::MatchExactly)[0];
@@ -214,7 +219,7 @@ void MainWindow::on_updateSettingsButton_clicked()
             test = true;
         }
          */
-        downloadNewsImage(query.value(IMAGE).toString());//start the news image downloads
+        //downloadNewsImage(query.value(IMAGE).toString());//start the news image downloads
 
         QLabel *catLabel = new QLabel("Category: " + query.value(CATEGORY).toString());
        // QLabel *blankLabel = new QLabel("thing");
