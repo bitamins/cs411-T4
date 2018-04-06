@@ -35,6 +35,9 @@ public:
     void restoreSettings();
     ~MainWindow();
 
+public slots:
+    void loadDLImage(QString url);
+
 private slots:
     void on_clearSettingsButton_clicked();
 
@@ -57,6 +60,8 @@ private slots:
     void downloadNewsImage(QString);
 
     void setNewsImages();
+
+    void print_newsItems();
 /*
     void getImageFromUrl(QString url);
 
@@ -77,6 +82,7 @@ private:
     QDate end;
     CustomDownloadManager CDM;
     bool test;
+    QVector<QWidget*> newsListItems;
 
 };
 

@@ -5,7 +5,13 @@ CustomDownloadManager::CustomDownloadManager()
 {
     connect(&manager, SIGNAL(finished(QNetworkReply*)),
             SLOT(downloadFinished(QNetworkReply*)));
+
+    connect(this, SIGNAL(downloadFinished(QString)),
+            parentWidget(),SLOT(loadDLImage(QString)));
+
+
     imageReady = false;
+    imageDirectory = "imageFiles";
 }
 
 bool CustomDownloadManager::imageDLcomplete(QNetworkReply *reply){
@@ -28,36 +34,25 @@ void CustomDownloadManager::startDownload(const QUrl &url)
     currentDownloads.append(reply);
 }
 
-//do not use this function
-QPixmap CustomDownloadManager::downloadImage(const QUrl &url)
-{
-    QNetworkRequest request(url);
-    QNetworkReply *reply = manager.get(request);
-
-    //check errors in link or security
-
-#if QT_CONFIG(ssl)
-    connect(reply, SIGNAL(sslErrors(QList<QSslError>)),
-            SLOT(sslErrors(QList<QSslError>)));
-  #endif
-
-    //append the download
-   QByteArray jpegData = reply->readAll();
-   QPixmap pm;
-   pm.loadFromData(jpegData);
-   return pm;
-}
-
 
 QString CustomDownloadManager::saveFileName(const QUrl &url)
 {
+    //QDir dir;
     QString path = url.path();
-    qDebug() << url.path();
+    qDebug() << "URL________ " << url.path() << endl;
     QString basename = QFileInfo(path).fileName();
+/*
+    int dir_exists = dir.exists(imageDirectory);
+    //if directory does not exist create it
 
+    if(!dir_exists){
+        dir.mkdir(imageDirectory)
+    }
+*/
     if(basename.isEmpty()){
         basename = "download";
     }
+    /* if we do not want to overwrite files
     if(QFile::exists(basename)){
         int i = 0;
         basename += '.';
@@ -66,15 +61,16 @@ QString CustomDownloadManager::saveFileName(const QUrl &url)
         }
         basename += QString::number(i);
     }
+    */
     return basename;
 
 }
 
 bool CustomDownloadManager::saveFileToDisk(const QString &filename, QIODevice *data)
 {
-    QString folderstring = "newsImages/";
-    folderstring.append(filename);
-    QFile file(folderstring);
+   // QString folderstring = "/newsImages/";
+   // folderstring.append(filename);
+    QFile file(filename);
     if(!file.open(QIODevice::WriteOnly)){
         fprintf(stderr, "could not open %s for writing: %s\n",
                 qPrintable(filename),
@@ -126,9 +122,13 @@ void CustomDownloadManager::sslErrors(const QList<QSslError> &sslErrors){
     Q_UNUSED(sslErrors);
 #endif
 }
-
+/*
+void CustomDownloadManager::imageDownloaded(QString url){
+    qDebug() << "here: " << url;
+}
+*/
 void CustomDownloadManager::downloadFinished(QNetworkReply *reply){
-    qDebug() << "download finished " << endl;
+    qDebug() << "download finished: " << reply->url() << endl;
     QUrl url = reply->url();
     if(reply->error()){
         fprintf(stderr, "Download of %s failed: %s\n",
@@ -152,4 +152,5 @@ void CustomDownloadManager::downloadFinished(QNetworkReply *reply){
         //no current downloads
         QCoreApplication::instance()->quit();
     }
+    emit imageDownloaded(url.toString());
 }

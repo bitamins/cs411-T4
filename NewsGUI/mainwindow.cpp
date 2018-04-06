@@ -194,6 +194,8 @@ void MainWindow::on_updateSettingsButton_clicked()
         //create custom widget item and layout
         QWidget *newWidget = new QWidget();
         QLayout *newGrid = new QGridLayout();
+        //QBoxLayout *newHLayout = new QHBoxLayout();
+        auto *newHLayout = new QHBoxLayout();
 
         //create item labels
         QLabel *titleLabel = new QLabel("Title: " + query.value(TITLE).toString());
@@ -204,33 +206,50 @@ void MainWindow::on_updateSettingsButton_clicked()
         QLabel *datLabel = new QLabel("Date: " + query.value(DATE).toDateTime().toString(dateFormat));
         QLabel *picLabel = new QLabel();
 
-       /*
-        if(!test){
-            picLabel->setPixmap(CDM.downloadImage(QUrl(query.value(IMAGE).toString())));
-            test = true;
-        }
-         */
+        //load image into list
+        QString lurl = R"(/home/main/Programs/cs411/NewsGUI/imageFiles/0.jpg)";
+        QPixmap img(lurl);
+        QSize imgSize(100,100);
+        QPixmap smallerImg = img.scaled(imgSize,Qt::KeepAspectRatio);
+
+        picLabel->setPixmap(smallerImg);
+
+
         downloadNewsImage(query.value(IMAGE).toString());//start the news image downloads
 
         QLabel *catLabel = new QLabel("Category: " + query.value(CATEGORY).toString());
-       // QLabel *blankLabel = new QLabel("thing");
 
         newGrid->setSpacing(0);
+        //newGrid->addWidget(picLabel);
         newGrid->addWidget(titleLabel);
         newGrid->addWidget(destLabel);
         newGrid->addWidget(srcLabel);
-        newGrid->addWidget(picLabel);
         newGrid->addWidget(datLabel);
         newGrid->addWidget(catLabel);
-        //newGrid->addWidget(blankLabel,0,0)
-        newWidget->setLayout(newGrid);
+
+        newHLayout->addWidget(picLabel);
+        newHLayout->addLayout(newGrid);
+        newWidget->setLayout(newHLayout);
+
         ui->newsListWidget->addItem(item);
         ui->newsListWidget->setItemWidget(item,newWidget);
         item->setData(3, query.value(URL).toString());
+        newsListItems.push_back(newWidget);
 
     }
+
     settingsWindow.close();
 
+}
+
+void MainWindow::loadDLImage(QString url){
+    qDebug() << url << endl;
+}
+
+void MainWindow::print_newsItems(){
+    for(int i=0;i<newsListItems.size();i++){
+        qDebug() << newsListItems[i];
+    }
 }
 
 /*
