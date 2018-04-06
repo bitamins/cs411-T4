@@ -17,6 +17,8 @@
 #include <QDateTime>
 #include <QMessageBox>
 #include <QNetworkAccessManager>
+#include "newsentry.h"
+#include "pagemanager.h"
 
 namespace Ui {
 class MainWindow;
@@ -77,7 +79,7 @@ private:
     QDate end;
     CustomDownloadManager CDM;
     bool test;
-
+    QList<QListWidget*> pages;
 };
 
 #endif // MAINWINDOW_H
