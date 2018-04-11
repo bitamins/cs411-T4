@@ -7,7 +7,7 @@ CustomDownloadManager::CustomDownloadManager()
             SLOT(downloadFinished(QNetworkReply*)));
 
     connect(this, SIGNAL(downloadFinished(QString)),
-            parentWidget(),SLOT(loadDLImage(QString)));
+            this->parentWidget(),SLOT(loadDLImage(QString)));
 
 
     imageReady = false;
