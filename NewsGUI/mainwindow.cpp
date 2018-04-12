@@ -21,6 +21,7 @@ MainWindow::MainWindow(QString username, QString pass, QWidget *parent) :
     ui->setupUi(this);
     limitDate = false;
 
+    currentPage = 0;
     //create Settings separate window
     //QWidget* settingsWindow = new QWidget();
     QLayout* settingsGrid = new QGridLayout();
@@ -200,7 +201,7 @@ void MainWindow::on_updateSettingsButton_clicked()
     try{
     pageManager::Instance();
     pageManager::Instance()->createPages(query, 10);
-    pageManager::Instance()->loadPage(0,ui->newsListWidget);
+    pageManager::Instance()->loadPage(currentPage,ui->newsListWidget);
     }
     catch(...)
     {
@@ -326,3 +327,12 @@ void MainWindow::on_dateCheckBox_stateChanged(int arg1)
 
 }
 
+
+void MainWindow::on_NextPage_clicked()
+{
+    if(currentPage == 10) {
+        currentPage = 0;
+    }
+    currentPage++;
+    pageManager::Instance()->loadPage(currentPage,ui->newsListWidget);
+}

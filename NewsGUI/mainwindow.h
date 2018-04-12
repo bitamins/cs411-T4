@@ -64,6 +64,8 @@ private slots:
 
     QPixmap downloadFinished(QNetworkReply *reply);
 */
+    void on_NextPage_clicked();
+
 private:
     Ui::MainWindow *ui;
     QDialog settingsWindow;
@@ -80,6 +82,7 @@ private:
     CustomDownloadManager CDM;
     bool test;
     QList<QListWidget*> pages;
+    int currentPage;
 };
 
 #endif // MAINWINDOW_H

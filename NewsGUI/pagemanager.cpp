@@ -16,6 +16,7 @@ void pageManager::createPages(QSqlQuery query, int pageSize)
 {
     QList<newsEntry> page;
     int count = 0;
+    QString dateFormat = "dddd, MMMM d, yyyy"; //day of week, month, day num, year
     while(query.next())
     {
         //QList<newsEntry> page;
@@ -28,7 +29,6 @@ void pageManager::createPages(QSqlQuery query, int pageSize)
         QLayout *newGrid = new QGridLayout();
 
         //create item labels
-        QString dateFormat = "dddd, MMMM d, yyyy"; //day of week, month, day num, year
         QLabel *titleLabel = new QLabel("Title: " + query.value(TITLE).toString());
         QLabel *destLabel = new QLabel("Description: " + query.value(DESCRIPTION).toString());
         destLabel->setWordWrap(true);
