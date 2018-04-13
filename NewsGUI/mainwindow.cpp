@@ -232,6 +232,7 @@ void MainWindow::on_updateSettingsButton_clicked()
         QPixmap smallerImg = img.scaled(imgSize,Qt::KeepAspectRatio);
 
         picLabel->setPixmap(smallerImg);
+        picLabel->setMaximumSize(100,100);
 
 
         downloadNewsImage(query.value(IMAGE).toString());//start the news image downloads
@@ -253,7 +254,7 @@ void MainWindow::on_updateSettingsButton_clicked()
         ui->newsListWidget->addItem(item);
         ui->newsListWidget->setItemWidget(item,newWidget);
         item->setData(3, query.value(URL).toString());
-        newsListItems.push_back(newWidget);
+        //newsListItems.push_back(newWidget);
 
     }
 
@@ -271,28 +272,6 @@ void MainWindow::print_newsItems(){
     }
 }
 
-/*
-//retrieves an image from a url for newslist items
-void getImageFromUrl(QString newsUrl)
-{
-   //create network interface object
-   //connect a slot for finished download flags
-   QNetworkAccessManager *nam = new QNetworkAccessManager();
-   QObject::connect(nam, &QNetworkAccessManager::finished, &MainWindow::downloadFinished);
-
-   //create network request then send it
-   const QUrl url = QUrl(newsUrl);
-   nam->get(request);
-}
-
-QPixmap downloadFinished(QNetworkReply *reply)
-{
-    QPixmap pm;
-    pm.loadFromData(reply.readAll());
-    delete reply;
-    return pm;
-}
-*/
 //takes a Qstring with the given format "word1,word2,word3"
 //then splits it based on commas and returns the result as a QstringList which is
 //essentially a string array
