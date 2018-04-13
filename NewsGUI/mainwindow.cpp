@@ -5,6 +5,14 @@ QStringList parseList(QString);
 QSqlDatabase startDb(QString, QString);
 void errorCheck(QSqlDatabase);
 
+MainWindow* MainWindow::_instance = 0;
+
+MainWindow* MainWindow::Instance(QString username, QString pass){
+    if ( _instance == 0 )
+       _instance = new MainWindow(username,pass);
+    return _instance;
+}
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -19,6 +27,9 @@ MainWindow::MainWindow(QString username, QString pass, QWidget *parent) :
     settings("RealNews", "NewsFetcher")
 {
     ui->setupUi(this);
+
+
+
     limitDate = false;
     //create Settings separate window
     //QWidget* settingsWindow = new QWidget();
@@ -43,10 +54,17 @@ MainWindow::MainWindow(QString username, QString pass, QWidget *parent) :
     //ui->categoriesLineEdit->setText(settings.value("CategoriesFilterText", "").toString());
     //ui->sourcesLineEdit->setText(settings.value("SourcesFilterText", "").toString());
 
+    CDM = CustomDownloadManager::Instance();
+    connect(CDM,SIGNAL(imageDownloaded(QString filename)),
+            this, SLOT(addImage(QString filename)));
+
     driver();
 
     settingsGrid->addWidget(ui->settingsGroupBox);
-    bool test=false;
+}
+
+void MainWindow::addImage(QString imageName){
+    qDebug() << "adding: " << imageName << endl;
 }
 
 MainWindow::~MainWindow()
@@ -63,6 +81,7 @@ MainWindow::~MainWindow()
         settings.setValue("EndDate", QVariant::fromValue(end));
     }
     delete ui;
+    delete _instance;
 }
 void MainWindow::driver()
 {
@@ -148,7 +167,7 @@ void MainWindow::restoreSettings()
 }
 
 void MainWindow::downloadNewsImage(QString url){
-    CDM.startDownload(QUrl(url));
+    CDM->startDownload(QUrl(url));
     qDebug() << "downloading " << url << endl;
 }
 

@@ -7,6 +7,7 @@
 #include "querybuilder.h"
 #include "customdownloadmanager.h"
 #include "sqlconn.hpp"
+//#include "newspages.h"
 #include <QDesktopServices>
 #include <QListWidget>
 #include <QUrl>
@@ -27,16 +28,21 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    MainWindow(QString,QString,QWidget *parent = 0);
+    static MainWindow* Instance(QString username, QString pass);
     void setupCategories();
     void setupSources();
     void driver();
     void restoreSettings();
     ~MainWindow();
 
+
+protected:
+     explicit MainWindow(QWidget *parent = 0);
+     MainWindow(QString,QString,QWidget *parent = 0);
+
 public slots:
     void loadDLImage(QString url);
+    void addImage(QString imageName);
 
 private slots:
     void on_clearSettingsButton_clicked();
@@ -69,6 +75,7 @@ private slots:
 */
 private:
     Ui::MainWindow *ui;
+    static MainWindow* _instance;
     QDialog settingsWindow;
     QSqlDatabase database;
     QueryBuilder queryBuilder;
@@ -80,8 +87,7 @@ private:
     QSettings settings;
     QDate begin;
     QDate end;
-    CustomDownloadManager CDM;
-    bool test;
+    CustomDownloadManager* CDM;
     QVector<QWidget*> newsListItems;
 
 };

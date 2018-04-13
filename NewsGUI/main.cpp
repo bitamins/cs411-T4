@@ -11,8 +11,26 @@ int main(int argc, char *argv[])
            a.exit();
            return 0;
     }
-    MainWindow w(QString::fromStdString(argv[1]),QString::fromStdString(argv[2]));
-    w.show();
+    /*
+    MainWindow *w = MainWidow::instance();
+    w->setCommandArgs(...);
+    w->show();
 
-    return a.exec();
+    int r = a.exec();
+
+    delete w;
+
+    return r;
+    */
+    //MainWindow w(QString::fromStdString(argv[1]),QString::fromStdString(argv[2]));
+    //w.show();
+    //return a.exec();
+    MainWindow* window = MainWindow::Instance(QString::fromStdString(argv[1]),QString::fromStdString(argv[2]));
+    window->show();
+    int returned = a.exec();
+    delete window;
+    return returned;
+
+
+
 }

@@ -22,24 +22,26 @@ class CustomDownloadManager: public QObject
     QVector<QNetworkReply *> currentDownloads;
 
 private:
-    bool imageReady;
+    //bool imageReady; //for testing
     string imageDirectory;
+    static CustomDownloadManager* _instance;
 
-public:
+protected:
     CustomDownloadManager();
+public:
+    static CustomDownloadManager* Instance();
     void startDownload(const QUrl &url);
     bool saveFileToDisk(const QString &fileame, QIODevice *data);
     static bool isHttpRedirect(QNetworkReply *reply);
     QString saveFileName(const QUrl &url);
 
 public slots:
-    bool imageDLcomplete(QNetworkReply *reply);
     void execute();
     void downloadFinished(QNetworkReply *reply);
     void sslErrors(const QList<QSslError> &errors);
 
 signals:
-    void imageDownloaded(QString url);
+    void imageDownloaded(QString filename);
 };
 
 #endif // CUSTOMDOWNLOADMANAGER_H
