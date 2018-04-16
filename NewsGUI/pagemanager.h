@@ -15,6 +15,8 @@ public:
     void createPages(QSqlQuery, int);
     void loadPage(int, QListWidget*);
     static pageManager* Instance();
+    int getNumOfPages();
+
 protected:
     pageManager();
 private:

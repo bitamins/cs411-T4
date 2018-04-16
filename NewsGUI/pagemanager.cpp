@@ -71,6 +71,11 @@ void pageManager::createPages(QSqlQuery query, int pageSize)
     }
 }
 
+int pageManager::getNumOfPages()
+{
+    return pages.size();
+}
+
 void pageManager::loadPage(int page, QListWidget* newsList)
 {
     if(pages.size() != 0)

@@ -330,9 +330,7 @@ void MainWindow::on_dateCheckBox_stateChanged(int arg1)
 
 void MainWindow::on_NextPage_clicked()
 {
-    if(currentPage == 10) {
-        currentPage = 0;
-    }
-    currentPage++;
+    //currentPage = (currentPage + 1) % pageManager::Instance()->getNumOfPages();
+    currentPage = 1;
     pageManager::Instance()->loadPage(currentPage,ui->newsListWidget);
 }
