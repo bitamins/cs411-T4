@@ -89,6 +89,9 @@
     </item>
     <item row="1" column="0">
      <widget class="QGroupBox" name="newsGroupBox">
+      <property name="autoFillBackground">
+       <bool>true</bool>
+      </property>
       <property name="title">
        <string>News</string>
       </property>
@@ -138,7 +141,7 @@
         <rect>
          <x>70</x>
          <y>280</y>
-         <width>113</width>
+         <width>72</width>
          <height>32</height>
         </rect>
        </property>

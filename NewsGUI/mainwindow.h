@@ -34,9 +34,12 @@ public:
     void setupSources();
     void driver();
     void restoreSettings();
-    void constructQuery(int, int);
+    void constructQueryWithLimit();
     int getTotalQuerySizeBeforeLimit();
     void changePageBackwards(bool isBackwards);
+
+    int startRow;
+    int rowsPerPage;
     ~MainWindow();
 
 private slots:
@@ -84,8 +87,7 @@ private:
     QSettings settings;
     QDate begin;
     QDate end;
-    int startRow;
-    int rowsPerPage;
+
     int querySize;
     CustomDownloadManager CDM;
     bool test;

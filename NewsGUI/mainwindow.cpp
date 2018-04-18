@@ -23,7 +23,6 @@ MainWindow::MainWindow(QString username, QString pass, QWidget *parent) :
 
     startRow = 1;
     rowsPerPage = 5;
-    currentPage = 0;
     querySize = 0;
     //create Settings separate window
     //QWidget* settingsWindow = new QWidget();
@@ -170,7 +169,7 @@ void MainWindow::setNewsImages(){
 
 }
 
-void MainWindow::constructQuery(int start, int numberOfRows) {
+void MainWindow::constructQueryWithLimit() {
     queryBuilder.clearQuery();
     //get sources list
     QStringList sourceList = activeSources;
@@ -185,7 +184,7 @@ void MainWindow::constructQuery(int start, int numberOfRows) {
     queryBuilder.addSources(sourceList);
     if(limitDate)
         queryBuilder.filterDate(begin,end);
-    queryBuilder.addRowSelection(start, numberOfRows);
+    queryBuilder.addRowSelection(startRow, rowsPerPage);
     queryBuilder.finalizeQuery();
 }
 
@@ -225,7 +224,7 @@ void MainWindow::on_updateSettingsButton_clicked()
     ui->newsListWidget->clear();
     querySize = getTotalQuerySizeBeforeLimit();
     qDebug() << querySize;
-    constructQuery(1, 5);
+    constructQueryWithLimit();
     QSqlQuery query = queryBuilder.execQuery();
     try{
     pageManager::Instance();
@@ -365,7 +364,7 @@ void MainWindow::changePageBackwards(bool backButtonPressed)
     else {
         startRow = (startRow + rowsPerPage) % querySize;
     }
-    constructQuery(startRow, rowsPerPage);
+    constructQueryWithLimit();
     QSqlQuery query = queryBuilder.execQuery();
     try{
         pageManager::Instance();
