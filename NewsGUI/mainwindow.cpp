@@ -227,7 +227,7 @@ void MainWindow::on_updateSettingsButton_clicked()
 
     ui->newsListWidget->clear();
     querySize = getTotalQuerySizeBeforeLimit();
-    qDebug() << querySize;
+    qDebug() << "Query Size: " << querySize;
     constructQueryWithLimit();
     QSqlQuery query = queryBuilder.execQuery();
     try{
