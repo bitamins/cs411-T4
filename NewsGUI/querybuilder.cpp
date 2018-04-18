@@ -45,6 +45,11 @@ void QueryBuilder::addFilterWords(QStringList filterWords)
     }
 }
 
+void QueryBuilder::addRowSelection(int start, int distance)
+{
+
+    queryString += " LIMIT " + QString::number(start) + "," + QString::number(distance);
+}
 // finalizes the string by adding a semi-colon to the end
 void QueryBuilder::finalizeQuery()
 {
@@ -153,6 +158,7 @@ void QueryBuilder::filterDate(QDate begin, QDate end)
     queryString.insert(insertionIndex, date);
 
 }
+
 QSqlQuery QueryBuilder::getFinalQuery()
 {
     return query;

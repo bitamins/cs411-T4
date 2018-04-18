@@ -35,6 +35,7 @@ public:
     void setupSources();
     void driver();
     void restoreSettings();
+    void constructQuery(int, int);
     ~MainWindow();
 
 private slots:

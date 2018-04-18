@@ -12,10 +12,13 @@ pageManager* pageManager::Instance()
     return _instance;
 }
 
-void pageManager::createPages(QSqlQuery query, int pageSize)
+void pageManager::createPages(QSqlQuery query, int pageSize, int page, QListWidget* newsList)
 {
-    QList<newsEntry> page;
+    pages.clear(); // HACK
+
+    QList<newsEntry> thepage;
     int count = 0;
+    int next = 0;
     QString dateFormat = "dddd, MMMM d, yyyy"; //day of week, month, day num, year
     while(query.next())
     {
@@ -61,12 +64,25 @@ void pageManager::createPages(QSqlQuery query, int pageSize)
         temp.setItems(newWidget, item, query.value(IMAGE).toString());
         item->setData(3, query.value(URL).toString());
         count ++;
-        page.append(temp);
+        thepage.append(temp);
         if(count == pageSize)
         {
-            pages.append(page);
+            pages.append(thepage);
             count = 0;
-            page.clear();
+            thepage.clear();
+        }
+
+    }
+
+    if(pages.size() != 0)
+    {
+        newsList->clear();
+
+        for(int i =0; i < pages[page].size(); i++)
+        {
+            newsList->addItem(pages[page][i].getItem());
+
+            newsList->setItemWidget(pages[page][i].getItem(),pages[page][i].getWidget());
         }
     }
 }
@@ -76,15 +92,3 @@ int pageManager::getNumOfPages()
     return pages.size();
 }
 
-void pageManager::loadPage(int page, QListWidget* newsList)
-{
-    if(pages.size() != 0)
-    {
-        newsList->clear();
-        for(int i =0; i < pages[page].size(); i++)
-        {
-            newsList->addItem(pages[page][i].getItem());
-            newsList->setItemWidget(pages[page][i].getItem(),pages[page][i].getWidget());
-        }
-    }
-}

@@ -12,8 +12,8 @@
 class pageManager
 {
 public:
-    void createPages(QSqlQuery, int);
-    void loadPage(int, QListWidget*);
+    void createPages(QSqlQuery, int, int, QListWidget*);
+    //void loadPage(int, QListWidget*);
     static pageManager* Instance();
     int getNumOfPages();
 

@@ -167,6 +167,25 @@ void MainWindow::setNewsImages(){
 
 }
 
+void MainWindow::constructQuery(int start, int numberOfRows) {
+    queryBuilder.clearQuery();
+    //get sources list
+    QStringList sourceList = activeSources;
+    //get categories list
+    QStringList categoryList = activeCategories;
+    QStringList filter = parseList(ui->filterLineEdit->text());
+    //query the data base for the list of news
+    queryBuilder.initQuery(categoryList);
+    //update the news list with the new news
+    queryBuilder.sort(false);
+    queryBuilder.addFilterWords(filter);
+    queryBuilder.addSources(sourceList);
+    if(limitDate)
+        queryBuilder.filterDate(begin,end);
+    queryBuilder.addRowSelection(start, numberOfRows);
+    queryBuilder.finalizeQuery();
+}
+
 void MainWindow::on_updateSettingsButton_clicked()
 {
     QList<QList<newsEntry>> pages;
@@ -180,28 +199,13 @@ void MainWindow::on_updateSettingsButton_clicked()
         return;
     }
     qDebug() << "Limiting dates: " << limitDate;
-    queryBuilder.clearQuery();
+
     ui->newsListWidget->clear();
-    //get sources list
-    QStringList sourceList = activeSources;
-    //get categories list
-    QStringList categoryList = activeCategories;
-    QStringList filter = parseList(ui->filterLineEdit->text());
-    //query the data base for the list of news
-    queryBuilder.initQuery(categoryList);
-    //update the news list with the new news
-    queryBuilder.sort(false);
-    queryBuilder.addFilterWords(filter);
-    queryBuilder.addSources(sourceList);
-    int count = 0;
-    if(limitDate)
-        queryBuilder.filterDate(begin,end);
-    queryBuilder.finalizeQuery();
+    constructQuery(1, 5);
     QSqlQuery query = queryBuilder.execQuery();
     try{
     pageManager::Instance();
-    pageManager::Instance()->createPages(query, 10);
-    pageManager::Instance()->loadPage(currentPage,ui->newsListWidget);
+    pageManager::Instance()->createPages(query, 3, 0,ui->newsListWidget);
     }
     catch(...)
     {
@@ -330,7 +334,16 @@ void MainWindow::on_dateCheckBox_stateChanged(int arg1)
 
 void MainWindow::on_NextPage_clicked()
 {
-    //currentPage = (currentPage + 1) % pageManager::Instance()->getNumOfPages();
-    currentPage = 1;
-    pageManager::Instance()->loadPage(currentPage,ui->newsListWidget);
+
+    QSqlQuery query = queryBuilder.execQuery();
+    try{
+    currentPage = (currentPage + 1) % pageManager::Instance()->getNumOfPages();
+    pageManager::Instance();
+    pageManager::Instance()->createPages(query, 10, currentPage,ui->newsListWidget);
+    }
+    catch(...)
+    {
+        qDebug() <<"fire the intern";
+    }
+
 }

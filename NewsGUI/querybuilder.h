@@ -25,7 +25,7 @@ public:
     QSqlQuery getFinalQuery();
     QSqlQuery execQuery();
     void addSources(QStringList);
-
+    void addRowSelection(int start, int end);
 
 private:
    QString queryString;
