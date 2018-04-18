@@ -55,16 +55,26 @@ MainWindow::MainWindow(QString username, QString pass, QWidget *parent) :
     //ui->sourcesLineEdit->setText(settings.value("SourcesFilterText", "").toString());
 
     CDM = CustomDownloadManager::Instance();
-    connect(CDM,SIGNAL(imageDownloaded(QString filename)),
-            this, SLOT(addImage(QString filename)));
 
+    QObject::connect(CDM,SIGNAL(imageDownloaded(QString)),SLOT(addImage(QString)));
+
+    //qDebug() << "connected image signal and slot" << endl;
     driver();
 
     settingsGrid->addWidget(ui->settingsGroupBox);
 }
 
 void MainWindow::addImage(QString imageName){
-    qDebug() << "adding: " << imageName << endl;
+    //qDebug() << "adding: " << imageName << endl;
+    printf("hello");
+    QLabel* picLabel = hashmap[imageName];
+
+    QPixmap img(imageName);
+    QSize imgSize(100,100);
+    QPixmap smallerImg = img.scaled(imgSize,Qt::KeepAspectRatio);
+
+    picLabel->setPixmap(smallerImg);
+    picLabel->setMaximumSize(100,100);
 }
 
 MainWindow::~MainWindow()
@@ -168,7 +178,7 @@ void MainWindow::restoreSettings()
 
 void MainWindow::downloadNewsImage(QString url){
     CDM->startDownload(QUrl(url));
-    qDebug() << "downloading " << url << endl;
+    //qDebug() << "downloading " << url << endl;
 }
 
 void MainWindow::setNewsImages(){
@@ -234,8 +244,10 @@ void MainWindow::on_updateSettingsButton_clicked()
         picLabel->setPixmap(smallerImg);
         picLabel->setMaximumSize(100,100);
 
-
+        //create the image file name before it is downloaded and use it as a key to the picture Qlable object
+        QString imgFileName = CDM->saveFileName(QUrl(query.value(IMAGE).toString()));
         downloadNewsImage(query.value(IMAGE).toString());//start the news image downloads
+        hashmap[imgFileName] = picLabel;
 
         QLabel *catLabel = new QLabel("Category: " + query.value(CATEGORY).toString());
 

@@ -28,6 +28,7 @@ private:
 
 protected:
     CustomDownloadManager();
+
 public:
     static CustomDownloadManager* Instance();
     void startDownload(const QUrl &url);
@@ -42,6 +43,7 @@ public slots:
 
 signals:
     void imageDownloaded(QString filename);
+
 };
 
 #endif // CUSTOMDOWNLOADMANAGER_H

@@ -18,6 +18,8 @@
 #include <QDateTime>
 #include <QMessageBox>
 #include <QNetworkAccessManager>
+#include <QObject>
+#include <QHash>
 
 namespace Ui {
 class MainWindow;
@@ -89,6 +91,7 @@ private:
     QDate end;
     CustomDownloadManager* CDM;
     QVector<QWidget*> newsListItems;
+    QHash<QString,QLabel*> hashmap;
 
 };
 

@@ -15,12 +15,7 @@ CustomDownloadManager::CustomDownloadManager()
 {
     connect(&manager, SIGNAL(finished(QNetworkReply*)),
             SLOT(downloadFinished(QNetworkReply*)));
-    /*
-    connect(this, SIGNAL(downloadFinished(QString)),
-            this->parentWidget(),SLOT(loadDLImage(QString)));
-    */
 
-    //imageReady = false;
     imageDirectory = "imageFiles";
 }
 
@@ -152,8 +147,8 @@ void CustomDownloadManager::downloadFinished(QNetworkReply *reply){
         }else{
             QString filename = saveFileName(url);
             if(saveFileToDisk(filename,reply)){
-                printf("Download of %s succeded (save to %s)\n\n",
-                       url.toEncoded().constData(),qPrintable(filename));
+                //printf("Download of %s succeded (save to %s)\n\n",
+                       url.toEncoded().constData(),qPrintable(filename);
                 emit imageDownloaded(filename);
             }
         }
