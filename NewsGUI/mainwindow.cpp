@@ -355,11 +355,11 @@ void MainWindow::on_dateCheckBox_stateChanged(int arg1)
 
 }
 
-void MainWindow::changePageBackwards(bool isBackwards)
+void MainWindow::changePageBackwards(bool backButtonPressed)
 {
     ui->newsListWidget->clear();
     int diff = startRow - rowsPerPage;
-    if(isBackwards){ //For negative numbers getting modded
+    if(backButtonPressed){ //For negative numbers getting modded
         startRow = (diff % querySize + querySize) % querySize;
     }
     else {
