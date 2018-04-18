@@ -357,20 +357,35 @@ void MainWindow::on_dateCheckBox_stateChanged(int arg1)
 
 }
 
-
-void MainWindow::on_NextPage_clicked()
+void MainWindow::changePage(bool isBackwards)
 {
     ui->newsListWidget->clear();
-    startRow = (startRow + rowsPerPage) % querySize;
+    int diff = startRow - rowsPerPage;
+    if(isBackwards){ //For negative numbers getting modded
+        startRow = (diff % querySize + querySize) % querySize;
+    }
+    else {
+        startRow = (startRow + rowsPerPage) % querySize;
+    }
     constructQuery(startRow, rowsPerPage);
     QSqlQuery query = queryBuilder.execQuery();
     try{
-    pageManager::Instance();
-    pageManager::Instance()->createPages(query,ui->newsListWidget);
+        pageManager::Instance();
+        pageManager::Instance()->createPages(query,ui->newsListWidget);
     }
     catch(...)
     {
         qDebug() <<"fire the intern";
     }
+}
 
+
+void MainWindow::on_NextPage_clicked()
+{
+   changePage(false);
+}
+
+void MainWindow::on_GoBack_clicked()
+{
+   changePage(true);
 }

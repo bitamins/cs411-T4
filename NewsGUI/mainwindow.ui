@@ -15,48 +15,44 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="1" column="0">
-     <widget class="QGroupBox" name="newsGroupBox">
-      <property name="title">
-       <string>News</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_6">
-       <item row="0" column="0">
-        <widget class="QGroupBox" name="filterGroupBox">
-         <property name="title">
-          <string>Filter</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_2">
-          <item row="0" column="0">
-           <widget class="QLineEdit" name="filterLineEdit"/>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QListWidget" name="newsListWidget"/>
-       </item>
-       <item row="2" column="0">
-        <widget class="QPushButton" name="NextPage">
-         <property name="text">
-          <string>Next</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
     <item row="0" column="0">
      <widget class="QGroupBox" name="settingsGroupBox">
       <property name="title">
        <string>Settings</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_7">
-       <item row="3" column="1">
-        <widget class="QPushButton" name="clearSettingsButton">
-         <property name="text">
-          <string>Clear</string>
+       <item row="2" column="0" colspan="2">
+        <widget class="QGroupBox" name="datesGroupBox">
+         <property name="title">
+          <string>Dates - mm/dd/yyyy</string>
          </property>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="dateCheckBox">
+            <property name="text">
+             <string>Limit Dates</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QDateEdit" name="fromDateEdit"/>
+          </item>
+          <item row="1" column="1">
+           <widget class="QDateEdit" name="toDateEdit"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="categoriesGroupBox">
+         <property name="title">
+          <string>Categories</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3" columnstretch="0">
+          <item row="1" column="0">
+           <widget class="QListWidget" name="categoryListWidget"/>
+          </item>
+         </layout>
         </widget>
        </item>
        <item row="1" column="1">
@@ -74,18 +70,6 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QGroupBox" name="categoriesGroupBox">
-         <property name="title">
-          <string>Categories</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_3" columnstretch="0">
-          <item row="1" column="0">
-           <widget class="QListWidget" name="categoryListWidget"/>
-          </item>
-         </layout>
-        </widget>
-       </item>
        <item row="3" column="0">
         <widget class="QPushButton" name="updateSettingsButton">
          <property name="text">
@@ -93,29 +77,75 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0" colspan="2">
-        <widget class="QGroupBox" name="datesGroupBox">
-         <property name="title">
-          <string>Dates - mm/dd/yyyy</string>
+       <item row="3" column="1">
+        <widget class="QPushButton" name="clearSettingsButton">
+         <property name="text">
+          <string>Clear</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_5">
-          <item row="1" column="1">
-           <widget class="QDateEdit" name="toDateEdit"/>
-          </item>
-          <item row="1" column="0">
-           <widget class="QDateEdit" name="fromDateEdit"/>
-          </item>
-          <item row="0" column="0">
-           <widget class="QCheckBox" name="dateCheckBox">
-            <property name="text">
-             <string>Limit Dates</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
         </widget>
        </item>
       </layout>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QGroupBox" name="newsGroupBox">
+      <property name="title">
+       <string>News</string>
+      </property>
+      <widget class="QGroupBox" name="filterGroupBox">
+       <property name="geometry">
+        <rect>
+         <x>15</x>
+         <y>21</y>
+         <width>155</width>
+         <height>70</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Filter</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QLineEdit" name="filterLineEdit"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QListWidget" name="newsListWidget">
+       <property name="geometry">
+        <rect>
+         <x>15</x>
+         <y>106</y>
+         <width>627</width>
+         <height>161</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="NextPage">
+       <property name="geometry">
+        <rect>
+         <x>510</x>
+         <y>280</y>
+         <width>71</width>
+         <height>32</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Next</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="GoBack">
+       <property name="geometry">
+        <rect>
+         <x>70</x>
+         <y>280</y>
+         <width>113</width>
+         <height>32</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Back</string>
+       </property>
+      </widget>
      </widget>
     </item>
    </layout>

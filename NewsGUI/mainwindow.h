@@ -37,6 +37,7 @@ public:
     void restoreSettings();
     void constructQuery(int, int);
     int getTotalQuerySizeBeforeLimit();
+    void changePage(bool isBackwards);
     ~MainWindow();
 
 private slots:
@@ -67,6 +68,9 @@ private slots:
     QPixmap downloadFinished(QNetworkReply *reply);
 */
     void on_NextPage_clicked();
+
+    void on_GoBack_clicked();
+
 
 private:
     Ui::MainWindow *ui;
