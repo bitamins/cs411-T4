@@ -21,7 +21,10 @@ MainWindow::MainWindow(QString username, QString pass, QWidget *parent) :
     ui->setupUi(this);
     limitDate = false;
 
+    startRow = 1;
+    rowsPerPage = 5;
     currentPage = 0;
+    querySize = 0;
     //create Settings separate window
     //QWidget* settingsWindow = new QWidget();
     QLayout* settingsGrid = new QGridLayout();
@@ -186,6 +189,27 @@ void MainWindow::constructQuery(int start, int numberOfRows) {
     queryBuilder.finalizeQuery();
 }
 
+int MainWindow::getTotalQuerySizeBeforeLimit()
+{
+    queryBuilder.clearQuery();
+    //get sources list
+    QStringList sourceList = activeSources;
+    //get categories list
+    QStringList categoryList = activeCategories;
+    QStringList filter = parseList(ui->filterLineEdit->text());
+    //query the data base for the list of news
+    queryBuilder.initQuery(categoryList);
+    //update the news list with the new news
+    queryBuilder.sort(false);
+    queryBuilder.addFilterWords(filter);
+    queryBuilder.addSources(sourceList);
+    if(limitDate)
+        queryBuilder.filterDate(begin,end);
+    queryBuilder.finalizeQuery();
+    QSqlQuery the_query = queryBuilder.execQuery();
+   return the_query.size();
+}
+
 void MainWindow::on_updateSettingsButton_clicked()
 {
     QList<QList<newsEntry>> pages;
@@ -201,11 +225,13 @@ void MainWindow::on_updateSettingsButton_clicked()
     qDebug() << "Limiting dates: " << limitDate;
 
     ui->newsListWidget->clear();
+    querySize = getTotalQuerySizeBeforeLimit();
+    qDebug() << querySize;
     constructQuery(1, 5);
     QSqlQuery query = queryBuilder.execQuery();
     try{
     pageManager::Instance();
-    pageManager::Instance()->createPages(query, 3, 0,ui->newsListWidget);
+    pageManager::Instance()->createPages(query,ui->newsListWidget);
     }
     catch(...)
     {
@@ -334,12 +360,13 @@ void MainWindow::on_dateCheckBox_stateChanged(int arg1)
 
 void MainWindow::on_NextPage_clicked()
 {
-
+    startRow = (startRow + rowsPerPage) % querySize;
+    constructQuery(startRow, rowsPerPage);
     QSqlQuery query = queryBuilder.execQuery();
     try{
-    currentPage = (currentPage + 1) % pageManager::Instance()->getNumOfPages();
+//    currentPage = (currentPage + 1) % pageManager::Instance()->getNumOfPages();
     pageManager::Instance();
-    pageManager::Instance()->createPages(query, 10, currentPage,ui->newsListWidget);
+    pageManager::Instance()->createPages(query,ui->newsListWidget);
     }
     catch(...)
     {

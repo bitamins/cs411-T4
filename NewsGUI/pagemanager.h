@@ -12,7 +12,7 @@
 class pageManager
 {
 public:
-    void createPages(QSqlQuery, int, int, QListWidget*);
+    void createPages(QSqlQuery, QListWidget*);
     //void loadPage(int, QListWidget*);
     static pageManager* Instance();
     int getNumOfPages();

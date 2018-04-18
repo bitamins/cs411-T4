@@ -36,6 +36,7 @@ public:
     void driver();
     void restoreSettings();
     void constructQuery(int, int);
+    int getTotalQuerySizeBeforeLimit();
     ~MainWindow();
 
 private slots:
@@ -80,6 +81,9 @@ private:
     QSettings settings;
     QDate begin;
     QDate end;
+    int startRow;
+    int rowsPerPage;
+    int querySize;
     CustomDownloadManager CDM;
     bool test;
     QList<QListWidget*> pages;
