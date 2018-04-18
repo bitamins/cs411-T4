@@ -31,7 +31,6 @@ SOURCES += \
         querybuilder.cpp \
         sqlconn.cpp \
     customdownloadmanager.cpp \
-    newsentry.cpp \
     pagemanager.cpp
 
 HEADERS += \
@@ -39,7 +38,6 @@ HEADERS += \
         querybuilder.h \
         sqlconn.hpp \
     customdownloadmanager.h \
-    newsentry.h \
     pagemanager.h
 
 FORMS += \
