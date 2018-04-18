@@ -15,13 +15,11 @@ public:
     void createPages(QSqlQuery, QListWidget*);
     //void loadPage(int, QListWidget*);
     static pageManager* Instance();
-    int getNumOfPages();
 
 protected:
     pageManager();
 private:
     static pageManager* _instance;
-    QList<QList<newsEntry>> pages;
 };
 
 #endif // PAGEMANAGER_H

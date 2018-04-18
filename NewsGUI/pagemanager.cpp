@@ -17,7 +17,6 @@ void pageManager::createPages(QSqlQuery query, QListWidget* newsList)
     QString dateFormat = "dddd, MMMM d, yyyy"; //day of week, month, day num, year
     while(query.next())
     {
-        newsEntry temp;
         QListWidgetItem *item = new QListWidgetItem();
         item->setSizeHint(QSize(0,145));
 
@@ -46,16 +45,10 @@ void pageManager::createPages(QSqlQuery query, QListWidget* newsList)
         newGrid->addWidget(picLabel);
         //newGrid->addWidget(blankLabel,0,0)
         newWidget->setLayout(newGrid);
-        temp.setItems(newWidget, item, query.value(IMAGE).toString());
         item->setData(3, query.value(URL).toString());
 
         newsList->addItem(item);
         newsList->setItemWidget(item, newWidget);
     }
-}
-
-int pageManager::getNumOfPages()
-{
-    return pages.size();
 }
 

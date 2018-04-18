@@ -360,11 +360,11 @@ void MainWindow::on_dateCheckBox_stateChanged(int arg1)
 
 void MainWindow::on_NextPage_clicked()
 {
+    ui->newsListWidget->clear();
     startRow = (startRow + rowsPerPage) % querySize;
     constructQuery(startRow, rowsPerPage);
     QSqlQuery query = queryBuilder.execQuery();
     try{
-//    currentPage = (currentPage + 1) % pageManager::Instance()->getNumOfPages();
     pageManager::Instance();
     pageManager::Instance()->createPages(query,ui->newsListWidget);
     }
