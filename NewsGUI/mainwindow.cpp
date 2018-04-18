@@ -213,6 +213,8 @@ int MainWindow::getTotalQuerySizeBeforeLimit()
 
 void MainWindow::on_updateSettingsButton_clicked()
 {
+    currentPage = 1;
+    ui->pageNum->setText("Page " + QString::number(currentPage));
     begin = ui->fromDateEdit->date();
     end = ui->toDateEdit->date();
     qDebug() << "begin: " <<  begin.toString() << " end: " << end.toString();
