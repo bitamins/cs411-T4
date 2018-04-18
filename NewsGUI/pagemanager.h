@@ -1,6 +1,5 @@
 #ifndef PAGEMANAGER_H
 #define PAGEMANAGER_H
-#include "newsentry.h"
 #include <QList>
 #include <QSqlQuery>
 #include <QListWidget>
@@ -8,7 +7,6 @@
 #include <QWidget>
 #include <QGridLayout>
 #include "querybuilder.h"
-#include "newsentry.h"
 class pageManager
 {
 public:

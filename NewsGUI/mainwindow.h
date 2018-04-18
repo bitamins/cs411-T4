@@ -17,7 +17,6 @@
 #include <QDateTime>
 #include <QMessageBox>
 #include <QNetworkAccessManager>
-#include "newsentry.h"
 #include "pagemanager.h"
 
 namespace Ui {
@@ -37,7 +36,7 @@ public:
     void restoreSettings();
     void constructQuery(int, int);
     int getTotalQuerySizeBeforeLimit();
-    void changePage(bool isBackwards);
+    void changePageBackwards(bool isBackwards);
     ~MainWindow();
 
 private slots:

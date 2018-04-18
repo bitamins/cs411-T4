@@ -212,8 +212,6 @@ int MainWindow::getTotalQuerySizeBeforeLimit()
 
 void MainWindow::on_updateSettingsButton_clicked()
 {
-    QList<QList<newsEntry>> pages;
-
     begin = ui->fromDateEdit->date();
     end = ui->toDateEdit->date();
     qDebug() << "begin: " <<  begin.toString() << " end: " << end.toString();
@@ -357,7 +355,7 @@ void MainWindow::on_dateCheckBox_stateChanged(int arg1)
 
 }
 
-void MainWindow::changePage(bool isBackwards)
+void MainWindow::changePageBackwards(bool isBackwards)
 {
     ui->newsListWidget->clear();
     int diff = startRow - rowsPerPage;
@@ -382,10 +380,10 @@ void MainWindow::changePage(bool isBackwards)
 
 void MainWindow::on_NextPage_clicked()
 {
-   changePage(false);
+   changePageBackwards(false);
 }
 
 void MainWindow::on_GoBack_clicked()
 {
-   changePage(true);
+   changePageBackwards(true);
 }
