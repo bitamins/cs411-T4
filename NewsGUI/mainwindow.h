@@ -89,7 +89,6 @@ private:
     int querySize;
     CustomDownloadManager CDM;
     bool test;
-    QList<QListWidget*> pages;
     int currentPage;
 };
 
