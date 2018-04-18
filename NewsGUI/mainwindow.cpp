@@ -362,7 +362,7 @@ void MainWindow::on_dateCheckBox_stateChanged(int arg1)
 void MainWindow::changePageBackwards(bool backButtonPressed)
 {
     ui->newsListWidget->clear();
-    int diff = startRow - rowsPerPage;
+    int diff = rowsPerPage - startRow;
     if(backButtonPressed){ // Back a page also for negative numbers getting modded
         startRow = (diff % querySize + querySize) % querySize;
         currentPage = ((currentPage - 1) % querySize + querySize) % querySize;
