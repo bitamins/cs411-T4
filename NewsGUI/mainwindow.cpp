@@ -360,12 +360,12 @@ void MainWindow::changePageBackwards(bool backButtonPressed)
 {
     ui->newsListWidget->clear();
     int diff = startRow - rowsPerPage;
-    if(backButtonPressed){ //For negative numbers getting modded
+    if(backButtonPressed){ // Back a page also for negative numbers getting modded
         startRow = (diff % querySize + querySize) % querySize;
         currentPage = ((currentPage - 1) % querySize + querySize) % querySize;
         ui->pageNum->setText("Page " + QString::number(currentPage));
     }
-    else {
+    else { // Going forward a page
         startRow = (startRow + rowsPerPage) % querySize;
         currentPage = (currentPage + 1) % querySize;
         ui->pageNum->setText("Page "+ QString::number(currentPage));
