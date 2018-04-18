@@ -24,6 +24,8 @@ MainWindow::MainWindow(QString username, QString pass, QWidget *parent) :
     startRow = 1;
     rowsPerPage = 5;
     querySize = 0;
+    currentPage = 1;
+    ui->pageNum->setText(QString::number(currentPage));
     //create Settings separate window
     //QWidget* settingsWindow = new QWidget();
     QLayout* settingsGrid = new QGridLayout();
@@ -360,9 +362,13 @@ void MainWindow::changePageBackwards(bool backButtonPressed)
     int diff = startRow - rowsPerPage;
     if(backButtonPressed){ //For negative numbers getting modded
         startRow = (diff % querySize + querySize) % querySize;
+        currentPage = ((currentPage - 1) % querySize + querySize) % querySize;
+        ui->pageNum->setText(QString::number(currentPage));
     }
     else {
         startRow = (startRow + rowsPerPage) % querySize;
+        currentPage = (currentPage + 1) % querySize;
+        ui->pageNum->setText(QString::number(currentPage));
     }
     constructQueryWithLimit();
     QSqlQuery query = queryBuilder.execQuery();
@@ -385,4 +391,5 @@ void MainWindow::on_NextPage_clicked()
 void MainWindow::on_GoBack_clicked()
 {
    changePageBackwards(true);
+
 }

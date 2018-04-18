@@ -149,6 +149,16 @@
         <string>Back</string>
        </property>
       </widget>
+      <widget class="QTextEdit" name="pageNum">
+       <property name="geometry">
+        <rect>
+         <x>263</x>
+         <y>280</y>
+         <width>81</width>
+         <height>21</height>
+        </rect>
+       </property>
+      </widget>
      </widget>
     </item>
    </layout>
