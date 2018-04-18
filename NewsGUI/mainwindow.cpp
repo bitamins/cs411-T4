@@ -208,7 +208,7 @@ int MainWindow::getTotalQuerySizeBeforeLimit()
         queryBuilder.filterDate(begin,end);
     queryBuilder.finalizeQuery();
     QSqlQuery the_query = queryBuilder.execQuery();
-   return the_query.size();
+    return the_query.size();
 }
 
 void MainWindow::on_updateSettingsButton_clicked()
@@ -229,8 +229,8 @@ void MainWindow::on_updateSettingsButton_clicked()
     constructQueryWithLimit();
     QSqlQuery query = queryBuilder.execQuery();
     try{
-    pageManager::Instance();
-    pageManager::Instance()->createPages(query,ui->newsListWidget);
+        pageManager::Instance();
+        pageManager::Instance()->createPages(query,ui->newsListWidget);
     }
     catch(...)
     {
@@ -311,17 +311,17 @@ void MainWindow::on_actionSettings_triggered()
 void MainWindow::on_categoryListWidget_itemChanged(QListWidgetItem *item)
 {
     if(item->checkState() == Qt::Checked && !activeCategories.contains(item->text()))
-            activeCategories.append(item->text());
-        else if(item->checkState() == Qt::Unchecked)
-            activeCategories.removeAt(activeCategories.indexOf(item->text()));
+        activeCategories.append(item->text());
+    else if(item->checkState() == Qt::Unchecked)
+        activeCategories.removeAt(activeCategories.indexOf(item->text()));
 }
 
 void MainWindow::on_sourcesListWidget_itemChanged(QListWidgetItem *item)
 {
     if(item->checkState() == Qt::Checked && !activeSources.contains(item->text()))
-            activeSources.append(item->text());
-        else if(item->checkState() == Qt::Unchecked)
-            activeSources.removeAt(activeSources.indexOf(item->text()));
+        activeSources.append(item->text());
+    else if(item->checkState() == Qt::Unchecked)
+        activeSources.removeAt(activeSources.indexOf(item->text()));
 }
 
 void MainWindow::on_filterLineEdit_returnPressed()
@@ -385,11 +385,11 @@ void MainWindow::changePageBackwards(bool backButtonPressed)
 
 void MainWindow::on_NextPage_clicked()
 {
-   changePageBackwards(false);
+    changePageBackwards(false);
 }
 
 void MainWindow::on_GoBack_clicked()
 {
-   changePageBackwards(true);
+    changePageBackwards(true);
 
 }
