@@ -21,6 +21,7 @@ MainWindow::MainWindow(QString username, QString pass, QWidget *parent) :
     ui->setupUi(this);
     limitDate = false;
 
+    ui->pageNum->installEventFilter(this);
     startRow = 1;
     rowsPerPage = 5;
     querySize = 0;
@@ -395,4 +396,15 @@ void MainWindow::on_GoBack_clicked()
 {
     changePageBackwards(true);
 
+}
+
+bool MainWindow::eventFilter(QObject *object, QEvent *event) //Check enter key
+{
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+        if ((keyEvent->key() == Qt::Key_Return) && (object == ui->pageNum) && (event->type() == QEvent::KeyPress))
+        {
+            // Special tab handling
+            qDebug("Enter Key Pressed...");
+            return true;
+        }
 }

@@ -37,6 +37,7 @@ public:
     void constructQueryWithLimit();
     int getTotalQuerySizeBeforeLimit();
     void changePageBackwards(bool isBackwards);
+    bool eventFilter(QObject *object, QEvent *event);
 
     int startRow;
     int rowsPerPage;
