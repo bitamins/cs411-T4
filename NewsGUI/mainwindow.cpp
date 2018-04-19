@@ -25,8 +25,8 @@ MainWindow::MainWindow(QString username, QString pass, QWidget *parent) :
     startRow = 1;
     rowsPerPage = 5;
     querySize = 0;
-    currentPage = 1;
-    ui->pageNum->setText("Page " + QString::number(currentPage));
+    currentPage = 0;
+    ui->pageNum->setText("Page " + QString::number(currentPage + 1));
     //create Settings separate window
     //QWidget* settingsWindow = new QWidget();
     QLayout* settingsGrid = new QGridLayout();
@@ -214,9 +214,9 @@ int MainWindow::getTotalQuerySizeBeforeLimit()
 
 void MainWindow::on_updateSettingsButton_clicked()
 {
-    currentPage = 1;
+    currentPage = 0;
     startRow = 1;
-    ui->pageNum->setText("Page " + QString::number(currentPage));
+    ui->pageNum->setText("Page " + QString::number(currentPage + 1));
     begin = ui->fromDateEdit->date();
     end = ui->toDateEdit->date();
     qDebug() << "begin: " <<  begin.toString() << " end: " << end.toString();
@@ -367,12 +367,12 @@ void MainWindow::goBackAPage(bool backButtonPressed)
     if(backButtonPressed){ // Back a page also for negative numbers getting modded
         startRow = (leftOffset % querySize + querySize) % querySize;
         currentPage = ((currentPage - 1) % querySize + querySize) % querySize;
-        ui->pageNum->setText("Page " + QString::number(currentPage));
+        ui->pageNum->setText("Page " + QString::number(currentPage + 1));
     }
     else { // Going forward a page
         startRow = (startRow + rowsPerPage) % querySize;
         currentPage = (currentPage + 1) % querySize;
-        ui->pageNum->setText("Page "+ QString::number(currentPage));
+        ui->pageNum->setText("Page "+ QString::number(currentPage + 1));
     }
     constructQueryWithLimit();
     QSqlQuery query = queryBuilder.execQuery();
