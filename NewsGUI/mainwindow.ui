@@ -130,16 +130,6 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
-        <widget class="QTextEdit" name="pageNum">
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>30</height>
-          </size>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="2">
         <widget class="QPushButton" name="NextPage">
          <property name="maximumSize">
@@ -152,6 +142,9 @@
           <string>Next</string>
          </property>
         </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="pageNum"/>
        </item>
       </layout>
      </widget>

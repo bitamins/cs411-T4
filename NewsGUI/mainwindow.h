@@ -37,7 +37,7 @@ public:
     void constructQueryWithLimit();
     int getTotalQuerySizeBeforeLimit();
     void goBackAPage(bool isBackwards);
-    bool eventFilter(QObject *object, QEvent *event);
+    //bool eventFilter(QObject *object, QEvent *event);
     void goToPageEntered();
     int extractPageNum();
 
@@ -76,6 +76,8 @@ private slots:
 
     void on_GoBack_clicked();
 
+
+    void on_pageNum_returnPressed();
 
 private:
     Ui::MainWindow *ui;

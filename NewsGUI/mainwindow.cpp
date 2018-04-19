@@ -21,7 +21,6 @@ MainWindow::MainWindow(QString username, QString pass, QWidget *parent) :
     ui->setupUi(this);
     limitDate = false;
 
-    ui->pageNum->installEventFilter(this);
     startRow = 1;
     rowsPerPage = 5;
     querySize = 0;
@@ -398,7 +397,7 @@ void MainWindow::on_GoBack_clicked()
 }
 
 int MainWindow::extractPageNum() {
-    QString pageLabel = ui->pageNum->toPlainText();
+    QString pageLabel = ui->pageNum->text();
 
     pageLabel.replace(" ", "");
     pageLabel.replace("Page", "");
@@ -429,13 +428,8 @@ void MainWindow::goToPageEntered()
     }
 }
 
-bool MainWindow::eventFilter(QObject *object, QEvent *event) //Check enter key pressed on text edit
+
+void MainWindow::on_pageNum_returnPressed()
 {
-        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-        if ((keyEvent->key() == Qt::Key_Return) && (object == ui->pageNum) && (event->type() == QEvent::KeyPress))
-        {
-            qDebug("Enter Key Pressed On Text Edit page number...");
-            goToPageEntered();
-            return true;
-        }
+    goToPageEntered();
 }
