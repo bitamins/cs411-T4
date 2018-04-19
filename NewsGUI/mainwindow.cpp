@@ -363,9 +363,9 @@ void MainWindow::on_dateCheckBox_stateChanged(int arg1)
 void MainWindow::goBackAPage(bool backButtonPressed)
 {
     ui->newsListWidget->clear();
-    int diff = rowsPerPage - startRow;
+    int leftOffset = startRow - rowsPerPage;
     if(backButtonPressed){ // Back a page also for negative numbers getting modded
-        startRow = (diff % querySize + querySize) % querySize;
+        startRow = (leftOffset % querySize + querySize) % querySize;
         currentPage = ((currentPage - 1) % querySize + querySize) % querySize;
         ui->pageNum->setText("Page " + QString::number(currentPage));
     }
