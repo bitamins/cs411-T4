@@ -419,8 +419,8 @@ void MainWindow::goToPageEntered()
         msgBox.exec();
     }
     else {
-        startRow = pageNumber;
-        currentPage = pageNumber;
+        startRow = pageNumber - 1;
+        currentPage = pageNumber - 1;
         ui->newsListWidget->clear();
         constructQueryWithLimit();
         QSqlQuery query = queryBuilder.execQuery();
