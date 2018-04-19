@@ -419,7 +419,7 @@ void MainWindow::goToPageEntered()
         msgBox.exec();
     }
     else {
-        startRow = pageNumber - 1;
+        startRow = pageNumber - 1; //Since row 0 exists
         currentPage = pageNumber - 1;
         ui->newsListWidget->clear();
         constructQueryWithLimit();
