@@ -413,7 +413,7 @@ void MainWindow::goToPageEntered()
         msgBox.setText("Please enter number again. Page Format: Page <PageNumber>");
         msgBox.exec();
     }
-    else if(pageNumber + rowsPerPage > querySize){
+    else if((pageNumber + rowsPerPage) > querySize){
         QMessageBox msgBox;
         msgBox.setText("Page out of range.");
         msgBox.exec();
@@ -434,7 +434,7 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event) //Check enter key p
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
         if ((keyEvent->key() == Qt::Key_Return) && (object == ui->pageNum) && (event->type() == QEvent::KeyPress))
         {
-            qDebug("Enter Key Pressed...");
+            qDebug("Enter Key Pressed On Text Edit page number...");
             goToPageEntered();
             return true;
         }
