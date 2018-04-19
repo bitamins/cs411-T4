@@ -21,7 +21,7 @@ MainWindow::MainWindow(QString username, QString pass, QWidget *parent) :
     ui->setupUi(this);
     limitDate = false;
 
-    startRow = 1;
+    startRow = 0;
     rowsPerPage = 5;
     querySize = 0;
     currentPage = 0;
