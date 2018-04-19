@@ -407,14 +407,9 @@ int MainWindow::extractPageNum() {
 void MainWindow::goToPageEntered()
 {
     int pageNumber = extractPageNum();
-    if(pageNumber < 1) {
+    if(pageNumber < 1 || ((pageNumber + rowsPerPage) > querySize)) {
         QMessageBox msgBox;
-        msgBox.setText("Please enter a valid number. Page Format: Page <PageNumber>");
-        msgBox.exec();
-    }
-    else if((pageNumber + rowsPerPage) > querySize){
-        QMessageBox msgBox;
-        msgBox.setText("Page out of range.");
+        msgBox.setText("Error: Please enter a valid number. Total pages: " + QString::number(querySize - rowsPerPage) + ". Page Format: Page <PageNumber>");
         msgBox.exec();
     }
     else {
