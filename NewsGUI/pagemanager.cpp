@@ -25,7 +25,7 @@ void pageManager::createPages(QSqlQuery query, QListWidget* newsList)
         QLayout *newGrid = new QGridLayout();
 
         //create item labels
-        QLabel *titleLabel = new QLabel("Title: " + query.value(TITLE).toString());
+        QLabel *titleLabel = new QLabel("Title: <strong>" + query.value(TITLE).toString() + "</strong>");
         QLabel *destLabel = new QLabel("Description: " + query.value(DESCRIPTION).toString());
         destLabel->setWordWrap(true);
         QLabel *srcLabel = new QLabel("Source: " + query.value(SOURCE).toString());
