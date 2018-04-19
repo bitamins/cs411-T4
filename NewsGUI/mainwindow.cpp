@@ -360,7 +360,7 @@ void MainWindow::on_dateCheckBox_stateChanged(int arg1)
 
 }
 
-void MainWindow::changePageBackwards(bool backButtonPressed)
+void MainWindow::goBackAPage(bool backButtonPressed)
 {
     ui->newsListWidget->clear();
     int diff = rowsPerPage - startRow;
@@ -389,22 +389,53 @@ void MainWindow::changePageBackwards(bool backButtonPressed)
 
 void MainWindow::on_NextPage_clicked()
 {
-    changePageBackwards(false);
+    goBackAPage(false);
 }
 
 void MainWindow::on_GoBack_clicked()
 {
-    changePageBackwards(true);
-
+    goBackAPage(true);
 }
 
-bool MainWindow::eventFilter(QObject *object, QEvent *event) //Check enter key
+int MainWindow::extractPageNum() {
+    QString pageLabel = ui->pageNum->toPlainText();
+
+    pageLabel.replace(" ", "");
+    pageLabel.replace("Page", "");
+    return pageLabel.toInt();
+}
+
+void MainWindow::goToPageEntered()
+{
+    int pageNumber = extractPageNum();
+    if(pageNumber < 1) {
+        QMessageBox msgBox;
+        msgBox.setText("Please enter number again. Page Format: Page <PageNumber>");
+        msgBox.exec();
+    }
+    else if(pageNumber + rowsPerPage > querySize){
+        QMessageBox msgBox;
+        msgBox.setText("Page out of range.");
+        msgBox.exec();
+    }
+    else {
+        startRow = pageNumber;
+        currentPage = pageNumber;
+        ui->newsListWidget->clear();
+        constructQueryWithLimit();
+        QSqlQuery query = queryBuilder.execQuery();
+        pageManager::Instance();
+        pageManager::Instance()->createPages(query,ui->newsListWidget);
+    }
+}
+
+bool MainWindow::eventFilter(QObject *object, QEvent *event) //Check enter key pressed on text edit
 {
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
         if ((keyEvent->key() == Qt::Key_Return) && (object == ui->pageNum) && (event->type() == QEvent::KeyPress))
         {
-            // Special tab handling
             qDebug("Enter Key Pressed...");
+            goToPageEntered();
             return true;
         }
 }
