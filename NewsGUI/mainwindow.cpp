@@ -409,7 +409,7 @@ void MainWindow::goToPageEntered()
     int pageNumber = extractPageNum();
     if(pageNumber < 1) {
         QMessageBox msgBox;
-        msgBox.setText("Please enter number again. Page Format: Page <PageNumber>");
+        msgBox.setText("Please enter a valid number. Page Format: Page <PageNumber>");
         msgBox.exec();
     }
     else if((pageNumber + rowsPerPage) > querySize){
