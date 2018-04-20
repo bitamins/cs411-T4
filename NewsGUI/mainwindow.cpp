@@ -5,6 +5,14 @@ QStringList parseList(QString);
 QSqlDatabase startDb(QString, QString);
 void errorCheck(QSqlDatabase);
 
+MainWindow* MainWindow::_instance = 0;
+
+MainWindow* MainWindow::Instance(QString username, QString pass){
+    if ( _instance == 0 )
+       _instance = new MainWindow(username,pass);
+    return _instance;
+}
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -19,6 +27,9 @@ MainWindow::MainWindow(QString username, QString pass, QWidget *parent) :
     settings("RealNews", "NewsFetcher")
 {
     ui->setupUi(this);
+
+
+
     limitDate = false;
 
     startRow = 0;
@@ -49,10 +60,27 @@ MainWindow::MainWindow(QString username, QString pass, QWidget *parent) :
     //ui->categoriesLineEdit->setText(settings.value("CategoriesFilterText", "").toString());
     //ui->sourcesLineEdit->setText(settings.value("SourcesFilterText", "").toString());
 
+    CDM = CustomDownloadManager::Instance();
+
+    QObject::connect(CDM,SIGNAL(imageDownloaded(QString)),SLOT(addImage(QString)));
+
+    //qDebug() << "connected image signal and slot" << endl;
     driver();
 
     settingsGrid->addWidget(ui->settingsGroupBox);
-    bool test=false;
+}
+
+void MainWindow::addImage(QString imageName){
+    //qDebug() << "adding: " << imageName << endl;
+    printf("hello");
+    QLabel* picLabel = hashmap[imageName];
+
+    QPixmap img(imageName);
+    QSize imgSize(100,100);
+    QPixmap smallerImg = img.scaled(imgSize,Qt::KeepAspectRatio);
+
+    picLabel->setPixmap(smallerImg);
+    picLabel->setMaximumSize(100,100);
 }
 
 MainWindow::~MainWindow()
@@ -69,6 +97,7 @@ MainWindow::~MainWindow()
         settings.setValue("EndDate", QVariant::fromValue(end));
     }
     delete ui;
+    delete _instance;
 }
 void MainWindow::driver()
 {
@@ -163,8 +192,8 @@ void MainWindow::restoreSettings()
 }
 
 void MainWindow::downloadNewsImage(QString url){
-    CDM.startDownload(QUrl(url));
-    qDebug() << "downloading " << url << endl;
+    CDM->startDownload(QUrl(url));
+    //qDebug() << "downloading " << url << endl;
 }
 
 void MainWindow::setNewsImages(){
@@ -239,32 +268,21 @@ void MainWindow::on_updateSettingsButton_clicked()
     {
         qDebug() <<"fire the intern";
     }
+
     settingsWindow.close();
 
 }
 
-/*
-//retrieves an image from a url for newslist items
-void getImageFromUrl(QString newsUrl)
-{
-   //create network interface object
-   //connect a slot for finished download flags
-   QNetworkAccessManager *nam = new QNetworkAccessManager();
-   QObject::connect(nam, &QNetworkAccessManager::finished, &MainWindow::downloadFinished);
-
-   //create network request then send it
-   const QUrl url = QUrl(newsUrl);
-   nam->get(request);
+void MainWindow::loadDLImage(QString url){
+    qDebug() << url << endl;
 }
 
-QPixmap downloadFinished(QNetworkReply *reply)
-{
-    QPixmap pm;
-    pm.loadFromData(reply.readAll());
-    delete reply;
-    return pm;
+void MainWindow::print_newsItems(){
+    for(int i=0;i<newsListItems.size();i++){
+        qDebug() << newsListItems[i];
+    }
 }
-*/
+
 //takes a Qstring with the given format "word1,word2,word3"
 //then splits it based on commas and returns the result as a QstringList which is
 //essentially a string array

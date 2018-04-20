@@ -1,16 +1,28 @@
 #include "customdownloadmanager.h"
 
+
+CustomDownloadManager* CustomDownloadManager::_instance = 0;
+
+CustomDownloadManager* CustomDownloadManager::Instance()
+{
+ if ( _instance == 0 )
+    _instance = new CustomDownloadManager();
+ return _instance;
+}
+
 //create a slot for finished downloads
 CustomDownloadManager::CustomDownloadManager()
 {
     connect(&manager, SIGNAL(finished(QNetworkReply*)),
             SLOT(downloadFinished(QNetworkReply*)));
-    imageReady = false;
-}
 
+<<<<<<< HEAD
 bool CustomDownloadManager::imageDLcomplete(QNetworkReply *reply){
     imageReady = true;
     return imageReady;
+=======
+    imageDirectory = "imageFiles";
+>>>>>>> CDMsigslot
 }
 
 //download an image
@@ -20,45 +32,40 @@ void CustomDownloadManager::startDownload(const QUrl &url)
     QNetworkReply *reply = manager.get(request);
 
     //check errors in link or security
+   /*
   #if QT_CONFIG(ssl)
     connect(reply, SIGNAL(sslErrors(QList<SslError>)),
             SLOT(sslErrors(QList<QSslError>)));
   #endif
-
+    */
     //append the download
     currentDownloads.append(reply);
-}
-
-//do not use this function
-QPixmap CustomDownloadManager::downloadImage(const QUrl &url)
-{
-    QNetworkRequest request(url);
-    QNetworkReply *reply = manager.get(request);
-
-    //check errors in link or security
-
-#if QT_CONFIG(ssl)
-    connect(reply, SIGNAL(sslErrors(QList<QSslError>)),
-            SLOT(sslErrors(QList<QSslError>)));
-  #endif
-
-    //append the download
-   QByteArray jpegData = reply->readAll();
-   QPixmap pm;
-   pm.loadFromData(jpegData);
-   return pm;
 }
 
 
 QString CustomDownloadManager::saveFileName(const QUrl &url)
 {
+    //QDir dir;
     QString path = url.path();
-    qDebug() << url.path();
-    QString basename = QFileInfo(path).fileName();
+    QString saveFilePath;
+    QStringList pathList = path.split('/');
+    QString newName = pathList.at(pathList.count() - 1);
+    saveFilePath = QString("imageFiles/" + newName);
 
+    //qDebug() << "URL________ " << url.path() << endl;
+    QString basename = QFileInfo(saveFilePath).fileName();
+/*
+    int dir_exists = dir.exists(imageDirectory);
+    //if directory does not exist create it
+
+    if(!dir_exists){
+        dir.mkdir(imageDirectory)
+    }
+*/
     if(basename.isEmpty()){
         basename = "download";
     }
+    /* if we do not want to overwrite files
     if(QFile::exists(basename)){
         int i = 0;
         basename += '.';
@@ -67,14 +74,20 @@ QString CustomDownloadManager::saveFileName(const QUrl &url)
         }
         basename += QString::number(i);
     }
+    */
     return basename;
 
 }
 
 bool CustomDownloadManager::saveFileToDisk(const QString &filename, QIODevice *data)
 {
+<<<<<<< HEAD
     //QString folderstring = "newsImages/";
     //folderstring.append(filename);
+=======
+   // QString folderstring = "/newsImages/";
+   // folderstring.append(filename);
+>>>>>>> CDMsigslot
     QFile file(filename);
     if(!file.open(QIODevice::WriteOnly)){
         fprintf(stderr, "could not open %s for writing: %s\n",
@@ -127,9 +140,13 @@ void CustomDownloadManager::sslErrors(const QList<QSslError> &sslErrors){
     Q_UNUSED(sslErrors);
 #endif
 }
-
+/*
+void CustomDownloadManager::imageDownloaded(QString filename){
+    qDebug() << "here: " << filename;
+}
+*/
 void CustomDownloadManager::downloadFinished(QNetworkReply *reply){
-    qDebug() << "download finished " << endl;
+    //qDebug() << "download finished: " << reply->url() << endl;
     QUrl url = reply->url();
     if(reply->error()){
         fprintf(stderr, "Download of %s failed: %s\n",
@@ -141,8 +158,9 @@ void CustomDownloadManager::downloadFinished(QNetworkReply *reply){
         }else{
             QString filename = saveFileName(url);
             if(saveFileToDisk(filename,reply)){
-                printf("Download of %s succeded (save to %s)\n",
-                       url.toEncoded().constData(),qPrintable(filename));
+                //printf("Download of %s succeded (save to %s)\n\n",
+                       url.toEncoded().constData(),qPrintable(filename);
+                emit imageDownloaded(filename);
             }
         }
       }
@@ -150,7 +168,8 @@ void CustomDownloadManager::downloadFinished(QNetworkReply *reply){
     reply->deleteLater();
 
     if(currentDownloads.isEmpty()){
+        qDebug() << "all image downloads complete.\n";
         //no current downloads
-        QCoreApplication::instance()->quit();
+        //QCoreApplication::instance()->quit();
     }
 }

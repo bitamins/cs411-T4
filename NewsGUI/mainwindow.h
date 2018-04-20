@@ -18,6 +18,8 @@
 #include <QMessageBox>
 #include <QNetworkAccessManager>
 #include "pagemanager.h"
+#include <QObject>
+#include <QHash>
 
 namespace Ui {
 class MainWindow;
@@ -28,8 +30,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    MainWindow(QString,QString,QWidget *parent = 0);
+    static MainWindow* Instance(QString username, QString pass);
     void setupCategories();
     void setupSources();
     void driver();
@@ -43,6 +44,15 @@ public:
     int startRow;
     int rowsPerPage;
     ~MainWindow();
+
+
+protected:
+     explicit MainWindow(QWidget *parent = 0);
+     MainWindow(QString,QString,QWidget *parent = 0);
+
+public slots:
+    void loadDLImage(QString url);
+    void addImage(QString imageName);
 
 private slots:
     void on_clearSettingsButton_clicked();
@@ -66,20 +76,18 @@ private slots:
     void downloadNewsImage(QString);
 
     void setNewsImages();
-/*
-    void getImageFromUrl(QString url);
 
-    QPixmap downloadFinished(QNetworkReply *reply);
-*/
+    void print_newsItems();
+
     void on_NextPage_clicked();
 
     void on_GoBack_clicked();
-
 
     void on_pageNum_returnPressed();
 
 private:
     Ui::MainWindow *ui;
+    static MainWindow* _instance;
     QDialog settingsWindow;
     QSqlDatabase database;
     QueryBuilder queryBuilder;
@@ -93,9 +101,12 @@ private:
     QDate end;
 
     int querySize;
-    CustomDownloadManager CDM;
     bool test;
     int currentPage;
+    CustomDownloadManager* CDM;
+    QVector<QWidget*> newsListItems;
+    QHash<QString,QLabel*> hashmap;
+
 };
 
 #endif // MAINWINDOW_H
