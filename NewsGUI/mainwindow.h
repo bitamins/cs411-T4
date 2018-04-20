@@ -36,7 +36,6 @@ public:
     void restoreSettings();
     void constructQueryWithLimit();
     int getTotalQuerySizeBeforeLimit();
-    void goBackAPage(bool isBackwards);
     void goToPageEntered();
     int extractPageNum();
 

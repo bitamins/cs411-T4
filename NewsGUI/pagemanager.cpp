@@ -2,7 +2,9 @@
 pageManager *pageManager::_instance = 0;
 pageManager::pageManager()
 {
-
+      startRow = 0;
+      rowsPerPage = 5;
+      currentPage = 0;
 }
 
 pageManager* pageManager::Instance()
@@ -52,3 +54,23 @@ void pageManager::createPages(QSqlQuery query, QListWidget* newsList)
     }
 }
 
+void pageManager::goBackAPage(bool backButtonPressed, QLineEdit* pageNum ,QListWidget* newsListWidget, QueryBuilder queryBuild, int querySize)
+{
+    newsListWidget->clear();
+    int leftOffset = startRow - rowsPerPage;
+    if(backButtonPressed){ // Back a page also for negative numbers getting modded
+        startRow = (leftOffset % querySize + querySize) % querySize;
+        currentPage = ((currentPage - 1) % querySize + querySize) % querySize;
+        pageNum->setText("Page " + QString::number(currentPage + 1));
+    }
+    else { // Going forward a page
+        startRow = (startRow + rowsPerPage) % querySize;
+        currentPage = (currentPage + 1) % querySize;
+        pageNum->setText("Page "+ QString::number(currentPage + 1));
+    }
+    constructQueryWithLimit();
+    QSqlQuery query = queryBuild.execQuery();
+
+    createPages(query,ui->newsListWidget);
+
+}

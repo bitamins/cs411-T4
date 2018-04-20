@@ -11,13 +11,15 @@ class pageManager
 {
 public:
     void createPages(QSqlQuery, QListWidget*);
-    //void loadPage(int, QListWidget*);
     static pageManager* Instance();
-
+    void goBackAPage(bool backButtonPressed, QLineEdit* pageNum ,QListWidget* newsListWidget, QueryBuilder queryBuild, int querySize);
 protected:
     pageManager();
 private:
     static pageManager* _instance;
+    int startRow;
+    int rowsPerPage;
+    int currentPage;
 };
 
 #endif // PAGEMANAGER_H
