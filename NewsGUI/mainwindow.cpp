@@ -213,7 +213,7 @@ int MainWindow::getTotalQuerySizeBeforeLimit()
 void MainWindow::on_updateSettingsButton_clicked()
 {
     currentPage = 0;
-    startRow = 1;
+    startRow = 0;
     ui->pageNum->setText("Page " + QString::number(currentPage + 1));
     begin = ui->fromDateEdit->date();
     end = ui->toDateEdit->date();
@@ -339,7 +339,6 @@ void MainWindow::on_dateCheckBox_stateChanged()
 
 void MainWindow::goBackAPage(bool backButtonPressed)
 {
-    ui->newsListWidget->clear();
     int leftOffset = startRow - rowsPerPage;
     if(backButtonPressed){ // Back a page also for negative numbers getting modded
         startRow = (leftOffset % querySize + querySize) % querySize;
@@ -385,20 +384,14 @@ int MainWindow::extractPageNum() {
 void MainWindow::goToPageEntered()
 {
     int pageNumber = extractPageNum();
-    if(pageNumber < 1) {
+    if(pageNumber < 1 || ((pageNumber + rowsPerPage) > querySize)) {
         QMessageBox msgBox;
-        msgBox.setText("Please enter a valid number. Page Format: Page <PageNumber>");
-        msgBox.exec();
-    }
-    else if((pageNumber + rowsPerPage) > querySize){
-        QMessageBox msgBox;
-        msgBox.setText("Page out of range.");
+        msgBox.setText("Error: Please enter a valid number. Total pages: " + QString::number(querySize - rowsPerPage) + ". Page Format: Page <PageNumber>");
         msgBox.exec();
     }
     else {
         startRow = pageNumber - 1; //Since row 0 exists
         currentPage = pageNumber - 1;
-        ui->newsListWidget->clear();
         constructQueryWithLimit();
         QSqlQuery query = queryBuilder.execQuery();
         pageManager::Instance();

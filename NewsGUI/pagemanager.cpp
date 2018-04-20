@@ -24,6 +24,7 @@ pageManager* pageManager::Instance()
 
 void pageManager::createPages(QSqlQuery query, QListWidget* newsList)
 {
+    newsList->clear();
     QString dateFormat = "dddd, MMMM d, yyyy"; //day of week, month, day num, year
     QString imgFileName = "";
     while(query.next())
@@ -37,7 +38,7 @@ void pageManager::createPages(QSqlQuery query, QListWidget* newsList)
         auto *newHLayout = new QHBoxLayout();
 
         //create item labels
-        QLabel *titleLabel = new QLabel("Title: " + query.value(TITLE).toString());
+        QLabel *titleLabel = new QLabel("Title: <strong>" + query.value(TITLE).toString() + "</strong>");
         QLabel *destLabel = new QLabel("Description: " + query.value(DESCRIPTION).toString());
             destLabel->setWordWrap(true);
         QLabel *srcLabel = new QLabel("Source: " + query.value(SOURCE).toString());
