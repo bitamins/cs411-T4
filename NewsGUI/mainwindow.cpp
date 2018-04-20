@@ -60,16 +60,18 @@ MainWindow::MainWindow(QString username, QString pass, QWidget *parent) :
     //ui->categoriesLineEdit->setText(settings.value("CategoriesFilterText", "").toString());
     //ui->sourcesLineEdit->setText(settings.value("SourcesFilterText", "").toString());
 
+    /*
     CDM = CustomDownloadManager::Instance();
 
     QObject::connect(CDM,SIGNAL(imageDownloaded(QString)),SLOT(addImage(QString)));
+    */
 
     //qDebug() << "connected image signal and slot" << endl;
     driver();
 
     settingsGrid->addWidget(ui->settingsGroupBox);
 }
-
+/*
 void MainWindow::addImage(QString imageName){
     //qDebug() << "adding: " << imageName << endl;
     printf("hello");
@@ -82,6 +84,7 @@ void MainWindow::addImage(QString imageName){
     picLabel->setPixmap(smallerImg);
     picLabel->setMaximumSize(100,100);
 }
+*/
 
 MainWindow::~MainWindow()
 {
@@ -190,12 +193,12 @@ void MainWindow::restoreSettings()
     }
     on_updateSettingsButton_clicked();
 }
-
+/*
 void MainWindow::downloadNewsImage(QString url){
     CDM->startDownload(QUrl(url));
     //qDebug() << "downloading " << url << endl;
 }
-
+*/
 void MainWindow::setNewsImages(){
 
 }

@@ -30,6 +30,7 @@ protected:
     CustomDownloadManager();
 
 public:
+    ~CustomDownloadManager();
     static CustomDownloadManager* Instance();
     void startDownload(const QUrl &url);
     bool saveFileToDisk(const QString &fileame, QIODevice *data);

@@ -15,16 +15,17 @@ CustomDownloadManager::CustomDownloadManager()
 {
     connect(&manager, SIGNAL(finished(QNetworkReply*)),
             SLOT(downloadFinished(QNetworkReply*)));
-
-<<<<<<< HEAD
+}
+CustomDownloadManager::~CustomDownloadManager(){
+    delete _instance;
+}
+/*
 bool CustomDownloadManager::imageDLcomplete(QNetworkReply *reply){
     imageReady = true;
     return imageReady;
-=======
     imageDirectory = "imageFiles";
->>>>>>> CDMsigslot
 }
-
+*/
 //download an image
 void CustomDownloadManager::startDownload(const QUrl &url)
 {
@@ -81,13 +82,6 @@ QString CustomDownloadManager::saveFileName(const QUrl &url)
 
 bool CustomDownloadManager::saveFileToDisk(const QString &filename, QIODevice *data)
 {
-<<<<<<< HEAD
-    //QString folderstring = "newsImages/";
-    //folderstring.append(filename);
-=======
-   // QString folderstring = "/newsImages/";
-   // folderstring.append(filename);
->>>>>>> CDMsigslot
     QFile file(filename);
     if(!file.open(QIODevice::WriteOnly)){
         fprintf(stderr, "could not open %s for writing: %s\n",

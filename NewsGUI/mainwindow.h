@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <QSqlDatabase>
 #include "querybuilder.h"
-#include "customdownloadmanager.h"
+//#include "customdownloadmanager.h"
 #include "sqlconn.hpp"
 #include <QDesktopServices>
 #include <QListWidget>
@@ -52,7 +52,7 @@ protected:
 
 public slots:
     void loadDLImage(QString url);
-    void addImage(QString imageName);
+   // void addImage(QString imageName);
 
 private slots:
     void on_clearSettingsButton_clicked();
@@ -73,7 +73,7 @@ private slots:
 
     void on_dateCheckBox_stateChanged(int arg1);
 
-    void downloadNewsImage(QString);
+   // void downloadNewsImage(QString);
 
     void setNewsImages();
 
@@ -103,7 +103,7 @@ private:
     int querySize;
     bool test;
     int currentPage;
-    CustomDownloadManager* CDM;
+    //CustomDownloadManager* CDM;
     QVector<QWidget*> newsListItems;
     QHash<QString,QLabel*> hashmap;
 

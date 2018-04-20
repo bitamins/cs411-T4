@@ -96,7 +96,7 @@
        <string>News</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
+       <item row="0" column="0" colspan="4">
         <widget class="QGroupBox" name="filterGroupBox">
          <property name="title">
           <string>Filter</string>
@@ -108,29 +108,7 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="0" colspan="3">
-        <widget class="QListWidget" name="newsListWidget"/>
-       </item>
-       <item row="2" column="0">
-        <widget class="QPushButton" name="GoBack">
-         <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>100</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Back</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
+       <item row="2" column="3">
         <widget class="QPushButton" name="NextPage">
          <property name="minimumSize">
           <size>
@@ -149,7 +127,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1" alignment="Qt::AlignHCenter">
+       <item row="2" column="2">
         <widget class="QLineEdit" name="pageNum">
          <property name="minimumSize">
           <size>
@@ -163,7 +141,35 @@
            <height>16777215</height>
           </size>
          </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
         </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QPushButton" name="GoBack">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>100</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Back</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="4">
+        <widget class="QListWidget" name="newsListWidget"/>
        </item>
       </layout>
      </widget>
