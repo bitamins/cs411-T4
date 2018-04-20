@@ -386,7 +386,7 @@ void MainWindow::goToPageEntered()
     int pageNumber = extractPageNum();
     if(pageNumber < 1 || ((pageNumber + rowsPerPage) > querySize)) {
         QMessageBox msgBox;
-        msgBox.setText("Error: Please enter a valid number. Total pages: " + QString::number(querySize - rowsPerPage) + ". Page Format: Page <PageNumber>");
+        msgBox.setText("Error: Please enter a valid number. Total pages: " + QString::number(querySize - rowsPerPage));
         msgBox.exec();
     }
     else {
