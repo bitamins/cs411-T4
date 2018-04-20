@@ -22,7 +22,6 @@ class CustomDownloadManager: public QObject
     QVector<QNetworkReply *> currentDownloads;
 
 private:
-    //bool imageReady; //for testing
     string imageDirectory;
     static CustomDownloadManager* _instance;
 

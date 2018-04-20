@@ -4,9 +4,6 @@
 #include <QMainWindow>
 #include <QDebug>
 #include <QSqlDatabase>
-#include "querybuilder.h"
-//#include "customdownloadmanager.h"
-#include "sqlconn.hpp"
 #include <QDesktopServices>
 #include <QListWidget>
 #include <QUrl>
@@ -17,9 +14,11 @@
 #include <QDateTime>
 #include <QMessageBox>
 #include <QNetworkAccessManager>
-#include "pagemanager.h"
 #include <QObject>
-#include <QHash>
+
+#include "pagemanager.h"
+#include "querybuilder.h"
+#include "sqlconn.hpp"
 
 namespace Ui {
 class MainWindow;
@@ -50,10 +49,6 @@ protected:
      explicit MainWindow(QWidget *parent = 0);
      MainWindow(QString,QString,QWidget *parent = 0);
 
-public slots:
-    void loadDLImage(QString url);
-   // void addImage(QString imageName);
-
 private slots:
     void on_clearSettingsButton_clicked();
 
@@ -71,13 +66,7 @@ private slots:
 
     void on_sourcesLineEdit_textEdited(const QString &arg1);
 
-    void on_dateCheckBox_stateChanged(int arg1);
-
-   // void downloadNewsImage(QString);
-
-    void setNewsImages();
-
-    void print_newsItems();
+    void on_dateCheckBox_stateChanged();
 
     void on_NextPage_clicked();
 
@@ -88,24 +77,25 @@ private slots:
 private:
     Ui::MainWindow *ui;
     static MainWindow* _instance;
+
     QDialog settingsWindow;
     QSqlDatabase database;
     QueryBuilder queryBuilder;
-    QStringList sources;
-    QStringList activeSources;
-    QStringList activeCategories;
-    QStringList filterList;
-    bool limitDate;
+
     QSettings settings;
     QDate begin;
     QDate end;
 
-    int querySize;
+    QStringList sources;
+    QStringList activeSources;
+    QStringList activeCategories;
+    QStringList filterList;
+
+    bool limitDate;
     bool test;
+
+    int querySize;
     int currentPage;
-    //CustomDownloadManager* CDM;
-    QVector<QWidget*> newsListItems;
-    QHash<QString,QLabel*> hashmap;
 
 };
 
