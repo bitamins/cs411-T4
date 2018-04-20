@@ -28,8 +28,6 @@ MainWindow::MainWindow(QString username, QString pass, QWidget *parent) :
 {
     ui->setupUi(this);
 
-
-
     limitDate = false;
 
     startRow = 0;
@@ -57,34 +55,11 @@ MainWindow::MainWindow(QString username, QString pass, QWidget *parent) :
         ui->fromDateEdit->setDate(begin);
         ui->toDateEdit->setDate(end);
     }
-    //ui->categoriesLineEdit->setText(settings.value("CategoriesFilterText", "").toString());
-    //ui->sourcesLineEdit->setText(settings.value("SourcesFilterText", "").toString());
 
-    /*
-    CDM = CustomDownloadManager::Instance();
-
-    QObject::connect(CDM,SIGNAL(imageDownloaded(QString)),SLOT(addImage(QString)));
-    */
-
-    //qDebug() << "connected image signal and slot" << endl;
     driver();
 
     settingsGrid->addWidget(ui->settingsGroupBox);
 }
-/*
-void MainWindow::addImage(QString imageName){
-    //qDebug() << "adding: " << imageName << endl;
-    printf("hello");
-    QLabel* picLabel = hashmap[imageName];
-
-    QPixmap img(imageName);
-    QSize imgSize(100,100);
-    QPixmap smallerImg = img.scaled(imgSize,Qt::KeepAspectRatio);
-
-    picLabel->setPixmap(smallerImg);
-    picLabel->setMaximumSize(100,100);
-}
-*/
 
 MainWindow::~MainWindow()
 {
@@ -193,15 +168,6 @@ void MainWindow::restoreSettings()
     }
     on_updateSettingsButton_clicked();
 }
-/*
-void MainWindow::downloadNewsImage(QString url){
-    CDM->startDownload(QUrl(url));
-    //qDebug() << "downloading " << url << endl;
-}
-*/
-void MainWindow::setNewsImages(){
-
-}
 
 void MainWindow::constructQueryWithLimit() {
     queryBuilder.clearQuery();
@@ -276,15 +242,6 @@ void MainWindow::on_updateSettingsButton_clicked()
 
 }
 
-void MainWindow::loadDLImage(QString url){
-    qDebug() << url << endl;
-}
-
-void MainWindow::print_newsItems(){
-    for(int i=0;i<newsListItems.size();i++){
-        qDebug() << newsListItems[i];
-    }
-}
 
 //takes a Qstring with the given format "word1,word2,word3"
 //then splits it based on commas and returns the result as a QstringList which is
@@ -371,7 +328,7 @@ void MainWindow::on_sourcesLineEdit_textEdited(const QString &arg1)
     }
 }
 
-void MainWindow::on_dateCheckBox_stateChanged(int arg1)
+void MainWindow::on_dateCheckBox_stateChanged()
 {
     if(ui->dateCheckBox->checkState() == Qt::Checked)
         limitDate = true;

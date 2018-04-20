@@ -19,13 +19,7 @@ CustomDownloadManager::CustomDownloadManager()
 CustomDownloadManager::~CustomDownloadManager(){
     delete _instance;
 }
-/*
-bool CustomDownloadManager::imageDLcomplete(QNetworkReply *reply){
-    imageReady = true;
-    return imageReady;
-    imageDirectory = "imageFiles";
-}
-*/
+
 //download an image
 void CustomDownloadManager::startDownload(const QUrl &url)
 {
@@ -55,14 +49,7 @@ QString CustomDownloadManager::saveFileName(const QUrl &url)
 
     //qDebug() << "URL________ " << url.path() << endl;
     QString basename = QFileInfo(saveFilePath).fileName();
-/*
-    int dir_exists = dir.exists(imageDirectory);
-    //if directory does not exist create it
 
-    if(!dir_exists){
-        dir.mkdir(imageDirectory)
-    }
-*/
     if(basename.isEmpty()){
         basename = "download";
     }
@@ -94,8 +81,6 @@ bool CustomDownloadManager::saveFileToDisk(const QString &filename, QIODevice *d
 
     return true;
 }
-
-//bool CustomDownloadManager::getFileFromDisk(const QString &filename, QIODevice *data)
 
 bool CustomDownloadManager::isHttpRedirect(QNetworkReply *reply)
 {
@@ -134,11 +119,7 @@ void CustomDownloadManager::sslErrors(const QList<QSslError> &sslErrors){
     Q_UNUSED(sslErrors);
 #endif
 }
-/*
-void CustomDownloadManager::imageDownloaded(QString filename){
-    qDebug() << "here: " << filename;
-}
-*/
+
 void CustomDownloadManager::downloadFinished(QNetworkReply *reply){
     //qDebug() << "download finished: " << reply->url() << endl;
     QUrl url = reply->url();

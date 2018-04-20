@@ -40,6 +40,8 @@ void pageManager::createPages(QSqlQuery query, QListWidget* newsList)
         QLabel *datLabel = new QLabel("Date: " + query.value(DATE).toDateTime().toString(dateFormat));
         QLabel *catLabel = new QLabel("Category: " + query.value(CATEGORY).toString());
         QLabel *picLabel = new QLabel();
+        picLabel->setMaximumSize(200,200);
+        picLabel->setMinimumSize(200,200);
 
         imgFileName = CDM->saveFileName(QUrl(query.value(IMAGE).toString()));
         downloadNewsImage(query.value(IMAGE).toString());
@@ -73,10 +75,9 @@ void pageManager::setNewsImage(QString imageName){
     QLabel* picLabel = imgHash[imageName];
 
     QPixmap img(imageName);
-    QSize imgSize(100,100);
-    QPixmap smallerImg = img.scaled(imgSize,Qt::KeepAspectRatio);
+    QSize imgSize(200,200);
+    QPixmap smallerImg = img.scaled(imgSize);//,Qt::KeepAspectRatio);
 
     picLabel->setPixmap(smallerImg);
-    picLabel->setMaximumSize(100,100);
 }
 
