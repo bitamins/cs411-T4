@@ -1,4 +1,8 @@
 #include "pagemanager.h"
+#include "customdownloadmanager.h"
+#include "querybuilder.h"
+
+
 pageManager *pageManager::_instance = 0;
 
 pageManager::pageManager()

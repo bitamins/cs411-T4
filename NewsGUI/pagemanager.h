@@ -8,8 +8,9 @@
 #include <QGridLayout>
 #include <QHash>
 #include <QObject>
-#include "querybuilder.h"
-#include "customdownloadmanager.h"
+
+class CustomDownloadManager;
+
 class pageManager:public QObject
 {
     Q_OBJECT
