@@ -38,7 +38,6 @@ public:
     int getTotalQuerySizeBeforeLimit();
     void goBackAPage(bool isBackwards);
     void goToPageEntered();
-    int extractPageNum();
 
     int startRow;
     int rowsPerPage;

@@ -4,6 +4,7 @@
 #include <QSqlQuery>
 #include <QListWidget>
 #include <QLabel>
+#include <QLineEdit>
 #include <QWidget>
 #include <QGridLayout>
 #include <QHash>
@@ -19,6 +20,7 @@ public:
     void createPages(QSqlQuery, QListWidget*);
     //void loadPage(int, QListWidget*);
     static pageManager* Instance();
+    int extractPageNum(QLineEdit*);
     ~pageManager();
 
 public slots:

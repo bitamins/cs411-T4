@@ -373,17 +373,10 @@ void MainWindow::on_GoBack_clicked()
     goBackAPage(true);
 }
 
-int MainWindow::extractPageNum() {
-    QString pageLabel = ui->pageNum->text();
-
-    pageLabel.replace(" ", "");
-    pageLabel.replace("Page", "");
-    return pageLabel.toInt();
-}
 
 void MainWindow::goToPageEntered()
 {
-    int pageNumber = extractPageNum();
+    int pageNumber = pageManager::Instance()->extractPageNum(ui->pageNum);
     if(pageNumber < 1 || ((pageNumber + rowsPerPage) > querySize)) {
         QMessageBox msgBox;
         msgBox.setText("Error: Please enter a valid number. Total pages: " + QString::number(querySize - rowsPerPage));
@@ -394,7 +387,6 @@ void MainWindow::goToPageEntered()
         currentPage = pageNumber - 1;
         constructQueryWithLimit();
         QSqlQuery query = queryBuilder.execQuery();
-        pageManager::Instance();
         pageManager::Instance()->createPages(query,ui->newsListWidget);
     }
 }

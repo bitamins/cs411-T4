@@ -70,6 +70,14 @@ void pageManager::createPages(QSqlQuery query, QListWidget* newsList)
     }
 }
 
+int pageManager::extractPageNum(QLineEdit* pageNum) {
+    QString pageLabel = pageNum->text();
+
+    pageLabel.replace(" ", "");
+    pageLabel.replace("Page", "");
+    return pageLabel.toInt();
+}
+
 void pageManager::downloadNewsImage(QString url){
     CDM->startDownload(QUrl(url));
     //qDebug() << "downloading: " << url << endl;
