@@ -33,16 +33,17 @@ void pageManager::createPages(QSqlQuery query, QListWidget* newsList)
         auto *newHLayout = new QHBoxLayout();
 
         //create item labels
-        QLabel *titleLabel = new QLabel("Title: " + query.value(TITLE).toString());
-        QLabel *destLabel = new QLabel("Description: " + query.value(DESCRIPTION).toString());
+        QLabel *titleLabel = new QLabel("<strong>Title: " + query.value(TITLE).toString() + "</strong>");
+        QLabel *destLabel = new QLabel("<strong>Description:</strong> " + query.value(DESCRIPTION).toString());
             destLabel->setWordWrap(true);
-        QLabel *srcLabel = new QLabel("Source: " + query.value(SOURCE).toString());
-        QLabel *datLabel = new QLabel("Date: " + query.value(DATE).toDateTime().toString(dateFormat));
-        QLabel *catLabel = new QLabel("Category: " + query.value(CATEGORY).toString());
+        QLabel *srcLabel = new QLabel("<strong>Source:</strong> " + query.value(SOURCE).toString());
+        QLabel *datLabel = new QLabel("<strong>Date:</strong> " + query.value(DATE).toDateTime().toString(dateFormat));
+        QLabel *catLabel = new QLabel("<strong>Category:</strong> " + query.value(CATEGORY).toString());
         QLabel *picLabel = new QLabel();
         picLabel->setMaximumSize(200,200);
         picLabel->setMinimumSize(200,200);
 
+        //create hashmap from pic name to pic label points
         imgFileName = CDM->saveFileName(QUrl(query.value(IMAGE).toString()));
         downloadNewsImage(query.value(IMAGE).toString());
         imgHash[imgFileName] = picLabel;
@@ -72,12 +73,16 @@ void pageManager::downloadNewsImage(QString url){
 
 void pageManager::setNewsImage(QString imageName){
     //qDebug() << "setting: " << imageName << endl;
-    QLabel* picLabel = imgHash[imageName];
+    try{
+        QLabel* picLabel = imgHash[imageName];
 
-    QPixmap img(imageName);
-    QSize imgSize(200,200);
-    QPixmap smallerImg = img.scaled(imgSize);//,Qt::KeepAspectRatio);
+        QPixmap img(imageName);
+        QSize imgSize(200,200);
+        QPixmap smallerImg = img.scaled(imgSize);//,Qt::KeepAspectRatio);
 
-    picLabel->setPixmap(smallerImg);
+        picLabel->setPixmap(smallerImg);
+    }catch(...){
+        qDebug() << "could not set news image";
+    }
 }
 

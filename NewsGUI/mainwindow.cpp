@@ -230,7 +230,7 @@ void MainWindow::on_updateSettingsButton_clicked()
     constructQueryWithLimit();
     QSqlQuery query = queryBuilder.execQuery();
     try{
-        pageManager::Instance();
+        //pageManager::Instance();
         pageManager::Instance()->createPages(query,ui->newsListWidget);
     }
     catch(...)

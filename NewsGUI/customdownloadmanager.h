@@ -7,7 +7,6 @@
 #include <QPixmap>
 #include <QDebug>
 #include <QDir>
-
 #include <cstdio>
 
 class QSslError;
