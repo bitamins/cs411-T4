@@ -338,28 +338,31 @@ void MainWindow::on_dateCheckBox_stateChanged()
 }
 
 void MainWindow::goBackAPage(bool backButtonPressed)
-{
-    ui->newsListWidget->clear();
-    int leftOffset = startRow - rowsPerPage;
-    if(backButtonPressed){ // Back a page also for negative numbers getting modded
-        startRow = (leftOffset % querySize + querySize) % querySize;
-        currentPage = ((currentPage - 1) % querySize + querySize) % querySize;
-        ui->pageNum->setText("Page " + QString::number(currentPage + 1));
-    }
-    else { // Going forward a page
-        startRow = (startRow + rowsPerPage) % querySize;
-        currentPage = (currentPage + 1) % querySize;
-        ui->pageNum->setText("Page "+ QString::number(currentPage + 1));
-    }
-    constructQueryWithLimit();
-    QSqlQuery query = queryBuilder.execQuery();
-    try{
-        pageManager::Instance();
-        pageManager::Instance()->createPages(query,ui->newsListWidget);
-    }
-    catch(...)
-    {
-        qDebug() <<"fire the intern";
+{   if(pageManager::Instance()->isReady()){
+        ui->newsListWidget->clear();
+        int leftOffset = startRow - rowsPerPage;
+        if(backButtonPressed){ // Back a page also for negative numbers getting modded
+            startRow = (leftOffset % querySize + querySize) % querySize;
+            currentPage = ((currentPage - 1) % querySize + querySize) % querySize;
+            ui->pageNum->setText("Page " + QString::number(currentPage + 1));
+        }
+        else { // Going forward a page
+            startRow = (startRow + rowsPerPage) % querySize;
+            currentPage = (currentPage + 1) % querySize;
+            ui->pageNum->setText("Page "+ QString::number(currentPage + 1));
+        }
+        try{
+            constructQueryWithLimit();
+            QSqlQuery query = queryBuilder.execQuery();
+            //pageManager::Instance();
+            pageManager::Instance()->createPages(query,ui->newsListWidget);
+        }
+        catch(...)
+        {
+            qDebug() <<"fire the intern";
+        }
+    }else{
+        qDebug() << "could not change page at this time, please try again";
     }
 }
 

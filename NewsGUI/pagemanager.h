@@ -18,6 +18,7 @@ public:
     void createPages(QSqlQuery, QListWidget*);
     //void loadPage(int, QListWidget*);
     static pageManager* Instance();
+    bool isReady();
     ~pageManager();
 
 public slots:
@@ -31,6 +32,7 @@ private:
     CustomDownloadManager* CDM;
     QHash<QString,QLabel*> imgHash;
     void downloadNewsImage(QString);
+    bool ready;
 };
 
 #endif // PAGEMANAGER_H

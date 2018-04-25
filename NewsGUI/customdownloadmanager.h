@@ -23,6 +23,7 @@ class CustomDownloadManager: public QObject
 private:
     string imageDirectory;
     static CustomDownloadManager* _instance;
+    static int count;
 
 protected:
     CustomDownloadManager();
@@ -34,6 +35,7 @@ public:
     bool saveFileToDisk(const QString &fileame, QIODevice *data);
     static bool isHttpRedirect(QNetworkReply *reply);
     QString saveFileName(const QUrl &url);
+    int getCount();
 
 public slots:
     void execute();

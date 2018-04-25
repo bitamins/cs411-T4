@@ -2,6 +2,7 @@
 
 
 CustomDownloadManager* CustomDownloadManager::_instance = 0;
+int CustomDownloadManager::count = 0;
 
 CustomDownloadManager* CustomDownloadManager::Instance()
 {
@@ -20,21 +21,29 @@ CustomDownloadManager::~CustomDownloadManager(){
     delete _instance;
 }
 
+int CustomDownloadManager::getCount(){
+    return count;
+}
+
 //download an image
 void CustomDownloadManager::startDownload(const QUrl &url)
 {
-    QNetworkRequest request(url);
-    QNetworkReply *reply = manager.get(request);
+    if(count <= 4){
+        QNetworkRequest request(url);
+        QNetworkReply *reply = manager.get(request);
 
-    //check errors in link or security
-   /*
-  #if QT_CONFIG(ssl)
-    connect(reply, SIGNAL(sslErrors(QList<SslError>)),
-            SLOT(sslErrors(QList<QSslError>)));
-  #endif
+        //check errors in link or security
+    /*
+      #if QT_CONFIG(ssl)
+        connect(reply, SIGNAL(sslErrors(QList<SslError>)),
+                SLOT(sslErrors(QList<QSslError>)));
+      #endif
     */
-    //append the download
-    currentDownloads.append(reply);
+        //append the download
+        currentDownloads.append(reply);
+        count++;
+       }
+    else{qDebug()<<"wait for current image downloads";}
 }
 
 
@@ -141,6 +150,7 @@ void CustomDownloadManager::downloadFinished(QNetworkReply *reply){
       }
     currentDownloads.removeAll(reply);
     reply->deleteLater();
+    count--;
 
     if(currentDownloads.isEmpty()){
         qDebug() << "all image downloads complete.\n";
