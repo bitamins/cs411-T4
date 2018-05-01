@@ -1,12 +1,12 @@
-#cs411-T4
+# cs411-T4
 Group Project: Real News
 
-#Tools
+# Tools
 C++ 11
 Qt5 Framework and IDE
 newsapi.org
 
-#Group Members
+# Group Members
 Ana
 Andrew
 Brandon
@@ -15,5 +15,5 @@ Michael
 Nick
 Tom
 
-#How-To
+# How-To
 the .pro file can be opened and run in the Qt creator
