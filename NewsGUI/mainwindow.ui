@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>428</width>
-    <height>431</height>
+    <width>681</width>
+    <height>760</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,51 +15,23 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="1" column="0">
-     <widget class="QGroupBox" name="newsGroupBox">
-      <property name="title">
-       <string>News</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_6">
-       <item row="1" column="0">
-        <widget class="QListWidget" name="newsListWidget"/>
-       </item>
-       <item row="0" column="0">
-        <widget class="QGroupBox" name="filterGroupBox">
-         <property name="title">
-          <string>Filter</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_2">
-          <item row="0" column="0">
-           <widget class="QLineEdit" name="lineEdit"/>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
     <item row="0" column="0">
      <widget class="QGroupBox" name="settingsGroupBox">
       <property name="title">
        <string>Settings</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_7">
-       <item row="2" column="1">
-        <widget class="QPushButton" name="clearSettingsButton">
-         <property name="text">
-          <string>Clear</string>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="1">
         <widget class="QGroupBox" name="sourcesGroupBox">
          <property name="title">
           <string>Sources</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
-          <item row="0" column="0">
+          <item row="1" column="0">
            <widget class="QLineEdit" name="sourcesLineEdit"/>
+          </item>
+          <item row="0" column="0">
+           <widget class="QListWidget" name="sourcesListWidget"/>
           </item>
          </layout>
         </widget>
@@ -71,17 +43,133 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_3" columnstretch="0">
           <item row="1" column="0">
-           <widget class="QLineEdit" name="categoriesLineEdit"/>
+           <widget class="QListWidget" name="categoryListWidget"/>
           </item>
          </layout>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item row="2" column="0" colspan="2">
+        <widget class="QGroupBox" name="datesGroupBox">
+         <property name="title">
+          <string>Dates - mm/dd/yyyy</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="dateCheckBox">
+            <property name="text">
+             <string>Limit Dates</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QDateEdit" name="fromDateEdit"/>
+          </item>
+          <item row="1" column="1">
+           <widget class="QDateEdit" name="toDateEdit"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="0">
         <widget class="QPushButton" name="updateSettingsButton">
          <property name="text">
           <string>Update</string>
          </property>
         </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QPushButton" name="clearSettingsButton">
+         <property name="text">
+          <string>Clear</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QGroupBox" name="newsGroupBox">
+      <property name="autoFillBackground">
+       <bool>true</bool>
+      </property>
+      <property name="title">
+       <string>News</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0" colspan="4">
+        <widget class="QGroupBox" name="filterGroupBox">
+         <property name="title">
+          <string>Filter</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QLineEdit" name="filterLineEdit"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="3">
+        <widget class="QPushButton" name="NextPage">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>71</width>
+           <height>42</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Next</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QLineEdit" name="pageNum">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QPushButton" name="GoBack">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>100</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Back</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="4">
+        <widget class="QListWidget" name="newsListWidget"/>
        </item>
       </layout>
      </widget>
@@ -93,7 +181,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>428</width>
+     <width>681</width>
      <height>22</height>
     </rect>
    </property>

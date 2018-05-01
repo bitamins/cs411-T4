@@ -4,15 +4,15 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
-QT       += sql
+QT       += core gui sql network
+
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = NewsGUI
 QTPLUGIN += QSQLMYSQL
 TEMPLATE = app
-
+VPATH = SRC INCLUDE
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
@@ -29,12 +29,16 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
         querybuilder.cpp \
-        sqlconn.cpp
+        sqlconn.cpp \
+    pagemanager.cpp \
+    downloadmanager.cpp
 
 HEADERS += \
         mainwindow.h \
         querybuilder.h \
-        sqlconn.hpp
+        sqlconn.hpp \
+    pagemanager.h \
+    downloadmanager.h
 
 FORMS += \
         mainwindow.ui

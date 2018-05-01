@@ -4,6 +4,7 @@
 #include <QString>
 #include <QSqlQuery>
 #include <QStringList>
+#include <QDate>
 enum COLUMNS{ID, TITLE, SOURCE, AUTHOR, URL, IMAGE, DATE, DESCRIPTION, CATEGORY};
 class QueryBuilder
 {
@@ -17,19 +18,23 @@ public:
     void addExclusionWords();
     void sort(bool);
     void initManual(QStringList);
-    void filterSource();
-    void clearQueries();
+    void filterDate(QDate, QDate);
+    void clearQuery();
     void addDatabase(QSqlDatabase databaseToAdd);
-    void initQueries(QStringList);
+    void initQuery(QStringList);
     QSqlQuery getFinalQuery();
     QSqlQuery execQuery();
-
+    void addSources(QStringList);
+    void addRowSelection(int start, int end);
 
 private:
    QString queryString;
    QSqlQuery query;
    bool final;
    QSqlDatabase database;
+   bool containsFilterWords;
+   bool containsSources;
+   bool containsCategories;
 };
 
 #endif // QUERYBUILDER_H
