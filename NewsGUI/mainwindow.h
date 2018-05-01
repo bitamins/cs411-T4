@@ -35,6 +35,7 @@ public:
     void setupSources();
     void driver();
     void restoreSettings();
+    void beginQueryConstruction();
     void constructQueryWithLimit();
     int getTotalQuerySizeBeforeLimit();
     void goBackAPage(bool isBackwards);
