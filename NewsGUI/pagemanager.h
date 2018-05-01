@@ -9,7 +9,7 @@
 #include <QHash>
 #include <QObject>
 #include "querybuilder.h"
-#include "customdownloadmanager.h"
+#include "downloadmanager.h"
 class pageManager:public QObject
 {
     Q_OBJECT
@@ -29,7 +29,7 @@ protected:
 
 private:
     static pageManager* _instance;
-    CustomDownloadManager* CDM;
+    DownloadManager* CDM;
     QHash<QString,QLabel*> imgHash;
     void downloadNewsImage(QString);
     bool ready;

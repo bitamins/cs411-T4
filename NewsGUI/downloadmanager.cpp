@@ -1,32 +1,32 @@
-#include "customdownloadmanager.h"
+#include "downloadmanager.h"
 
 
-CustomDownloadManager* CustomDownloadManager::_instance = 0;
-int CustomDownloadManager::count = 0;
+DownloadManager* DownloadManager::_instance = 0;
+int DownloadManager::count = 0;
 
-CustomDownloadManager* CustomDownloadManager::Instance()
+DownloadManager* DownloadManager::Instance()
 {
  if ( _instance == 0 )
-    _instance = new CustomDownloadManager();
+    _instance = new DownloadManager();
  return _instance;
 }
 
 //create a slot for finished downloads
-CustomDownloadManager::CustomDownloadManager()
+DownloadManager::DownloadManager()
 {
     connect(&manager, SIGNAL(finished(QNetworkReply*)),
             SLOT(downloadFinished(QNetworkReply*)));
 }
-CustomDownloadManager::~CustomDownloadManager(){
+DownloadManager::~DownloadManager(){
     delete _instance;
 }
 
-int CustomDownloadManager::getCount(){
+int DownloadManager::getCount(){
     return count;
 }
 
 //download an image
-void CustomDownloadManager::startDownload(const QUrl &url)
+void DownloadManager::startDownload(const QUrl &url)
 {
     if(count <= 4){
         QNetworkRequest request(url);
@@ -47,7 +47,7 @@ void CustomDownloadManager::startDownload(const QUrl &url)
 }
 
 
-QString CustomDownloadManager::saveFileName(const QUrl &url)
+QString DownloadManager::saveFileName(const QUrl &url)
 {
     //QDir dir;
     QString path = url.path();
@@ -76,7 +76,7 @@ QString CustomDownloadManager::saveFileName(const QUrl &url)
 
 }
 
-bool CustomDownloadManager::saveFileToDisk(const QString &filename, QIODevice *data)
+bool DownloadManager::saveFileToDisk(const QString &filename, QIODevice *data)
 {
     QFile file(filename);
     if(!file.open(QIODevice::WriteOnly)){
@@ -91,7 +91,7 @@ bool CustomDownloadManager::saveFileToDisk(const QString &filename, QIODevice *d
     return true;
 }
 
-bool CustomDownloadManager::isHttpRedirect(QNetworkReply *reply)
+bool DownloadManager::isHttpRedirect(QNetworkReply *reply)
 {
     int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     return statusCode == 301 ||
@@ -102,7 +102,7 @@ bool CustomDownloadManager::isHttpRedirect(QNetworkReply *reply)
             statusCode == 308;
 }
 
-void CustomDownloadManager::execute()
+void DownloadManager::execute()
 {
     QStringList args = QCoreApplication::instance()->arguments();
     args.takeFirst();
@@ -119,7 +119,7 @@ void CustomDownloadManager::execute()
 }
 
 
-void CustomDownloadManager::sslErrors(const QList<QSslError> &sslErrors){
+void DownloadManager::sslErrors(const QList<QSslError> &sslErrors){
 #if QT_CONFIG(ssl)
     for(const QSslError &error : sslErrors){
         fprintf(stderr,"SSL error: %s\n",qPrintable(error.errorString()));
@@ -129,7 +129,7 @@ void CustomDownloadManager::sslErrors(const QList<QSslError> &sslErrors){
 #endif
 }
 
-void CustomDownloadManager::downloadFinished(QNetworkReply *reply){
+void DownloadManager::downloadFinished(QNetworkReply *reply){
     //qDebug() << "download finished: " << reply->url() << endl;
     QUrl url = reply->url();
     if(reply->error()){

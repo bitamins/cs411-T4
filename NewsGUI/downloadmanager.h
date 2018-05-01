@@ -1,5 +1,5 @@
-#ifndef CUSTOMDOWNLOADMANAGER_H
-#define CUSTOMDOWNLOADMANAGER_H
+#ifndef DownloadManager_H
+#define DownloadManager_H
 
 #include <QtCore>
 #include <QtNetwork>
@@ -13,8 +13,8 @@ class QSslError;
 
 using namespace std;
 
-
-class CustomDownloadManager: public QObject
+//used qt5 documentation example http://doc.qt.io/qt-5/qtnetwork-download-main-cpp.html
+class DownloadManager: public QObject
 {
     Q_OBJECT
     QNetworkAccessManager manager;
@@ -22,15 +22,15 @@ class CustomDownloadManager: public QObject
 
 private:
     string imageDirectory;
-    static CustomDownloadManager* _instance;
+    static DownloadManager* _instance;
     static int count;
 
 protected:
-    CustomDownloadManager();
+    DownloadManager();
 
 public:
-    ~CustomDownloadManager();
-    static CustomDownloadManager* Instance();
+    ~DownloadManager();
+    static DownloadManager* Instance();
     void startDownload(const QUrl &url);
     bool saveFileToDisk(const QString &fileame, QIODevice *data);
     static bool isHttpRedirect(QNetworkReply *reply);
@@ -47,4 +47,4 @@ signals:
 
 };
 
-#endif // CUSTOMDOWNLOADMANAGER_H
+#endif // DownloadManager_H

@@ -30,15 +30,15 @@ SOURCES += \
         mainwindow.cpp \
         querybuilder.cpp \
         sqlconn.cpp \
-    customdownloadmanager.cpp \
-    pagemanager.cpp
+    pagemanager.cpp \
+    downloadmanager.cpp
 
 HEADERS += \
         mainwindow.h \
         querybuilder.h \
         sqlconn.hpp \
-    customdownloadmanager.h \
-    pagemanager.h
+    pagemanager.h \
+    downloadmanager.h
 
 FORMS += \
         mainwindow.ui

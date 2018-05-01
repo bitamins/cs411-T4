@@ -3,7 +3,7 @@ pageManager *pageManager::_instance = 0;
 
 pageManager::pageManager()
 {
-    CDM = CustomDownloadManager::Instance();
+    CDM = DownloadManager::Instance();
     QObject::connect(CDM,SIGNAL(imageDownloaded(QString)),SLOT(setNewsImage(QString)));
     ready=true;
 }
