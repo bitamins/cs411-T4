@@ -7,6 +7,7 @@
 #include <QDesktopServices>
 #include <QListWidget>
 #include <QUrl>
+
 #include <QLabel>
 #include <QDialog>
 #include <QSqlError>
@@ -34,6 +35,7 @@ public:
     void setupSources();
     void driver();
     void restoreSettings();
+    void beginQueryConstruction();
     void constructQueryWithLimit();
     int getTotalQuerySizeBeforeLimit();
     void goBackAPage(bool isBackwards);

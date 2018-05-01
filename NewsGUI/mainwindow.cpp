@@ -169,26 +169,7 @@ void MainWindow::restoreSettings()
     on_updateSettingsButton_clicked();
 }
 
-void MainWindow::constructQueryWithLimit() {
-    queryBuilder.clearQuery();
-    //get sources list
-    QStringList sourceList = activeSources;
-    //get categories list
-    QStringList categoryList = activeCategories;
-    QStringList filter = parseList(ui->filterLineEdit->text());
-    //query the data base for the list of news
-    queryBuilder.initQuery(categoryList);
-    //update the news list with the new news
-    queryBuilder.sort(false);
-    queryBuilder.addFilterWords(filter);
-    queryBuilder.addSources(sourceList);
-    if(limitDate)
-        queryBuilder.filterDate(begin,end);
-    queryBuilder.addRowSelection(startRow, rowsPerPage);
-    queryBuilder.finalizeQuery();
-}
-
-int MainWindow::getTotalQuerySizeBeforeLimit()
+void MainWindow::beginQueryConstruction()
 {
     queryBuilder.clearQuery();
     //get sources list
@@ -204,6 +185,17 @@ int MainWindow::getTotalQuerySizeBeforeLimit()
     queryBuilder.addSources(sourceList);
     if(limitDate)
         queryBuilder.filterDate(begin,end);
+}
+
+void MainWindow::constructQueryWithLimit() {
+    beginQueryConstruction();
+    queryBuilder.addRowSelection(startRow, rowsPerPage);
+    queryBuilder.finalizeQuery();
+}
+
+int MainWindow::getTotalQuerySizeBeforeLimit()
+{
+    beginQueryConstruction();
     queryBuilder.finalizeQuery();
     QSqlQuery the_query = queryBuilder.execQuery();
     return the_query.size();
@@ -366,7 +358,6 @@ void MainWindow::goBackAPage(bool backButtonPressed)
     }
 }
 
-
 void MainWindow::on_NextPage_clicked()
 {
     goBackAPage(false);
@@ -414,3 +405,4 @@ void MainWindow::on_pageNum_returnPressed()
 {
     goToPageEntered();
 }
+

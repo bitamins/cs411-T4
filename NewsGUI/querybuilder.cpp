@@ -11,6 +11,7 @@
 QueryBuilder::QueryBuilder()
 {
     qDebug() << "Initializing queryBuilder";
+
     containsCategories = false;
     containsFilterWords = false;
     containsSources = false;
@@ -25,6 +26,7 @@ QueryBuilder::QueryBuilder()
 void QueryBuilder::addFilterWords(QStringList filterWords)
 {
     int i = 1;
+
     if(!queryString.contains("WHERE"))
         queryString += " WHERE ";
     int insertionIndex = queryString.indexOf("WHERE") + 6;
@@ -74,8 +76,10 @@ void QueryBuilder::clearQuery()
 {
     queryString = "";
     query.clear();
+
     final = false;
     containsFilterWords = false;
+
 }
 
 void QueryBuilder::addDatabase(QSqlDatabase databaseToAdd)
@@ -87,14 +91,15 @@ void QueryBuilder::initQuery(QStringList listOfCategories)
 {
         int i = 0;
         queryString = "SELECT DISTINCT * FROM News WHERE (";
+
         foreach(QString category, listOfCategories)
         {
             queryString += "category='" + category +"'";
             if(i++ != listOfCategories.size() - 1)
                  queryString +=" OR ";
         }
-        queryString += ")";
 
+        queryString += ")";
 }
 
 void QueryBuilder::initManual(QStringList columns)
@@ -156,7 +161,6 @@ void QueryBuilder::filterDate(QDate begin, QDate end)
     int insertionIndex = queryString.indexOf("WHERE") + 6;
 
     queryString.insert(insertionIndex, date);
-
 }
 
 QSqlQuery QueryBuilder::getFinalQuery()
